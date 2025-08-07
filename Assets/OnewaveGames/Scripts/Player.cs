@@ -17,7 +17,7 @@ public class Player : Actor
     {
         if (grabSkillInput != null && grabSkillInput.action != null)
         {
-            grabSkillInput.action.performed+= OnInputPerformed;
+            grabSkillInput.action.started+= OnInputPerformed;
             grabSkillInput.action.canceled+= OnInputCanceled;    
         }
     }

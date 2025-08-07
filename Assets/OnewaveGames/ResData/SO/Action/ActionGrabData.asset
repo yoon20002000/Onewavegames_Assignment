@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: ActionGrabData
   m_EditorClassIdentifier: 
   eActionTag: 0
-  ActionRange: 0
-  ActionValue: 0
-  ApplyEffects: []
-  Cooldown: 0
-  EffectCost: {fileID: 0}
+  actionRange: 100
+  actionValue: 0
+  applyEffects: []
+  cooldown: 0
+  effectCost: {fileID: 11400000, guid: 76512595104db8a44a23c384c6e87d9b, type: 2}
+  projectilePrefab: {fileID: 887003906559711819, guid: 5decaad8215de8343834f69a09234690, type: 3}

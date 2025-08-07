@@ -14,7 +14,7 @@ public struct ActionDataWithInputID
 public class ActionSystem : MonoBehaviour
 {
    protected Actor ownerActor;
-
+   public Actor OwnerActor => ownerActor;
    [SerializeField]
    protected List<ActionDataWithInputID> defaultActionData = new List<ActionDataWithInputID>();
    
@@ -48,6 +48,11 @@ public class ActionSystem : MonoBehaviour
    {
       if (addedActions.TryGetValue(eActionTag, out ActionInstance action))
       {
+         if (!action.CanStartAction() || action.bIsActionRunning)
+         {
+            Debug.LogWarning("Can not start action. Tag : "+ eActionTag.ToString());
+            return;
+         }
          action.StartAction();
       }
    }
@@ -56,7 +61,10 @@ public class ActionSystem : MonoBehaviour
    {
       if (addedActions.TryGetValue(eActionTag, out ActionInstance action))
       {
-         action.StopAction();
+         if (action.bIsActionRunning)
+         {
+            action.StopAction();   
+         }
       }
    }
 

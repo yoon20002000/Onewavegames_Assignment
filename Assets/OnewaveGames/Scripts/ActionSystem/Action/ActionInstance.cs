@@ -20,6 +20,7 @@ public class ActionInstance
     protected float curCooldown;
     public ActionInstance(ActionData data, ActionSystem inActionSystem, Hash128 inputID = default)
     {
+        ActionOwner = inActionSystem.OwnerActor;
         Data = data;
         actionSystem = inActionSystem;
         ActionRange = data.ActionRange;
@@ -40,25 +41,15 @@ public class ActionInstance
 
     public virtual void StartAction()
     {
-        if (!CanStartAction() || bIsActionRunning)
-        {
-            return;
-        }
-        
         ApplyCost();
 
         bIsActionRunning = true;
         curCooldown = ActionCooldown;
-        
-        foreach (var effect in Data.ApplyEffects)
-        {
-            //actionSystem.ExecuteGameplayEffect(effect,targets);
-        }
     }
 
     public virtual void StopAction()
     {
-        
+        bIsActionRunning = false;
     }
 
     public bool IsCooldown()
@@ -77,19 +68,19 @@ public class ActionInstance
         {
             case ActionEffectCostType.HP:
             {
-                return ActionOwner.CurHP > Data.EffectCost.Value;
+                return ActionOwner.CurHP >= Data.EffectCost.Value;
             }
             case ActionEffectCostType.MaxHP:
             {
-                return ActionOwner.MaxHP > Data.EffectCost.Value;
+                return ActionOwner.MaxHP >= Data.EffectCost.Value;
             }
             case ActionEffectCostType.MP:
             {
-                return ActionOwner.CurHP > Data.EffectCost.Value;
+                return ActionOwner.CurMP >= Data.EffectCost.Value;
             }
             case ActionEffectCostType.MaxMP:
             {
-                return ActionOwner.MaxMP > Data.EffectCost.Value;
+                return ActionOwner.MaxMP >= Data.EffectCost.Value;
             }
             case ActionEffectCostType.None:
             default:

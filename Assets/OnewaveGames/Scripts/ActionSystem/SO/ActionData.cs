@@ -15,10 +15,6 @@ public class ActionData : ScriptableObject
     [SerializeField]
     private float actionValue;
     public float ActionValue => actionValue;
-
-    [SerializeField]
-    private List<ActionEffectData> applyEffects;
-    public List<ActionEffectData> ApplyEffects => applyEffects;
     
     [SerializeField]
     private float cooldown;

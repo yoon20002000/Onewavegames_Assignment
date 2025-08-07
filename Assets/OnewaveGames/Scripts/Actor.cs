@@ -30,7 +30,7 @@ public abstract class Actor : MonoBehaviour
             actionSystem = this.AddComponent<ActionSystem>();
         }
 
-        curHP = Mathf.Clamp(curHP, 0, maxHP);
-        curMP = Mathf.Clamp(curMP, 0, maxMP);
+        curHP = Mathf.Clamp(maxHP, 1, maxHP);
+        curMP = Mathf.Clamp(maxMP, 1, maxMP);
     }
 }
