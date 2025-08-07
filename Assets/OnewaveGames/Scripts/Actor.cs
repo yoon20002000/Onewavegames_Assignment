@@ -2,18 +2,26 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class Actor : MonoBehaviour
+public abstract class Actor : MonoBehaviour
 {
     [SerializeField]
-    ActionSystem actionSystem;
-
-    [SerializeField]
-    private float maxMana;
-    public float GetMaxMana => maxMana;
+    protected ActionSystem actionSystem;
+    public ActionSystem GetActionSystem() => actionSystem;
     
-    private float curMana;
-    public float GetMana => curMana;
-    private void Awake()
+    [SerializeField] private float maxHP;
+    public float MaxHP { get { return maxHP; } set { maxHP = value; } }
+    private float curHP;
+    public float CurHP { get { return curHP; } set { curHP = value; } }
+    
+    [SerializeField]
+    private float maxMP;
+    public float MaxMP { get { return maxMP; } set { maxMP = value; } }
+    
+    private float curMP;
+    public float CurMP { get { return curMP; } set { curMP = value; } }
+    
+    
+    protected virtual void Awake()
     {
         actionSystem = GetComponent<ActionSystem>();
         Assert.IsNotNull(actionSystem, "Actor action system is null");
@@ -22,7 +30,7 @@ public class Actor : MonoBehaviour
             actionSystem = this.AddComponent<ActionSystem>();
         }
 
-        curMana = maxMana;
-        // action 시스템을 통한 input binding 추가 필요
+        curHP = Mathf.Clamp(curHP, 0, maxHP);
+        curMP = Mathf.Clamp(curMP, 0, maxMP);
     }
 }

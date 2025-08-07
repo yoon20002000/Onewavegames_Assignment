@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class ActionEffectInstance
 {
     protected Actor effectInstigator;
@@ -22,7 +25,7 @@ public class ActionEffectInstance
         return true;
     }
 
-    public virtual void ExecuteEffect()
+    public virtual void ExecuteEffect(List<Actor> targetActors)
     {
         
     }

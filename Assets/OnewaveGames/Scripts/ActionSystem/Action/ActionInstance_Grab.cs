@@ -5,7 +5,7 @@ public class ActionInstance_Grab : ActionInstance
     [SerializeField]
     private GameObject projectilePrefab;
     
-    public ActionInstance_Grab(ActionData data, ActionSystem inActionSystem, int inputID = -1) : base(data, inActionSystem, inputID)
+    public ActionInstance_Grab(ActionData data, ActionSystem inActionSystem, Hash128 inputID = default) : base(data, inActionSystem, inputID)
     {
     }
 

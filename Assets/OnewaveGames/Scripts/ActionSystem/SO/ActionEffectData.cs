@@ -7,4 +7,8 @@ public class ActionEffectData : ScriptableObject
     public float Value;
     public float Duration = 1f;
     public float Period = 1f;
+    public virtual ActionEffectInstance CreateInstance(ActionSystem system)
+    {
+        return new ActionEffectInstance(this, system);
+    }
 }
