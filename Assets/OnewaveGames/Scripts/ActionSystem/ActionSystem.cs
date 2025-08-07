@@ -50,7 +50,6 @@ public class ActionSystem : MonoBehaviour
       {
          if (!action.CanStartAction() || action.bIsActionRunning)
          {
-            Debug.LogWarning("Can not start action. Tag : "+ eActionTag.ToString());
             return;
          }
          action.StartAction();
@@ -75,29 +74,29 @@ public class ActionSystem : MonoBehaviour
          return;
       }
       
-      switch (costData.CostType)
+      switch (costData.ECostType)
       {
-         case ActionEffectCostType.HP:
+         case EActionEffectCostType.HP:
          {
             GameUtils.ApplyDamage(applyActor,costData.Value);
             break;
          }
-         case ActionEffectCostType.MaxHP:
+         case EActionEffectCostType.MaxHP:
          {
             GameUtils.ApplyDecreaseMaxMp(applyActor,costData.Value);
              break;
          }
-         case ActionEffectCostType.MP:
+         case EActionEffectCostType.MP:
          {
             GameUtils.ApplyCost(applyActor,costData.Value);
             break;
          }
-         case ActionEffectCostType.MaxMP:
+         case EActionEffectCostType.MaxMP:
          {
             GameUtils.ApplyDecreaseMaxMp(applyActor,costData.Value);
             break;
          }
-         case ActionEffectCostType.None:
+         case EActionEffectCostType.None:
          default:
          {
             break;

@@ -64,25 +64,25 @@ public class ActionInstance
         {
             return true;
         }
-        switch (Data.EffectCost.CostType)
+        switch (Data.EffectCost.ECostType)
         {
-            case ActionEffectCostType.HP:
+            case EActionEffectCostType.HP:
             {
                 return ActionOwner.CurHP >= Data.EffectCost.Value;
             }
-            case ActionEffectCostType.MaxHP:
+            case EActionEffectCostType.MaxHP:
             {
                 return ActionOwner.MaxHP >= Data.EffectCost.Value;
             }
-            case ActionEffectCostType.MP:
+            case EActionEffectCostType.MP:
             {
                 return ActionOwner.CurMP >= Data.EffectCost.Value;
             }
-            case ActionEffectCostType.MaxMP:
+            case EActionEffectCostType.MaxMP:
             {
                 return ActionOwner.MaxMP >= Data.EffectCost.Value;
             }
-            case ActionEffectCostType.None:
+            case EActionEffectCostType.None:
             default:
             {
                 return true;

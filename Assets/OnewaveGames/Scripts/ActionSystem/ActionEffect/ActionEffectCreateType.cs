@@ -1,4 +1,4 @@
-public enum ActionEffectCreateType 
+public enum EActionEffectCreateType 
 {
     Instance,
     HasDuration,

@@ -4,8 +4,12 @@ using UnityEngine;
 public class ActionEffectData : ScriptableObject
 {
     [SerializeField]
-    private ActionEffectCreateType eEffectInstanceType;
-    public ActionEffectCreateType EffectInstanceType => eEffectInstanceType;
+    private EGameplayTag_ActionEffect eEffectTag;
+    public EGameplayTag_ActionEffect EEffectTag => eEffectTag;
+    
+    [SerializeField]
+    private EActionEffectCreateType eEffectInstanceType;
+    public EActionEffectCreateType EffectInstanceType => eEffectInstanceType;
     
     [SerializeField]
     private float value;

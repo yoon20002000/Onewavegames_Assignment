@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum ActionEffectCostType
+public enum EActionEffectCostType
 {
     None,
     HP,
