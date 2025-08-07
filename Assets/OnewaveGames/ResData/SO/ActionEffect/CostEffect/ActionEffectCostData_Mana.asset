@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ActionEffectCostData_Mana
   m_EditorClassIdentifier: 
   eEffectInstanceType: 0
-  value: 150
+  value: 50
   duration: 1
   period: 1
   costType: 3

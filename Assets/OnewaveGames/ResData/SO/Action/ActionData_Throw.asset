@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8fef1f7ecee676447bfbb3332460cb57, type: 3}
-  m_Name: ActionGrabData
+  m_Name: ActionData_Throw
   m_EditorClassIdentifier: 
   eActionTag: 0
-  actionRange: 100
-  actionValue: 0
-  applyEffects: []
+  actionRange: 0
+  actionValue: 10
   cooldown: 0
   effectCost: {fileID: 11400000, guid: 76512595104db8a44a23c384c6e87d9b, type: 2}
   projectilePrefab: {fileID: 887003906559711819, guid: 5decaad8215de8343834f69a09234690, type: 3}

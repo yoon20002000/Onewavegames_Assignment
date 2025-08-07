@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ActionDataThrow", menuName = "Scriptable Objects/ActionDataThrow")]
-public class ActionDataThrow : ActionData
+public class ActionData_Throw : ActionData
 {
     [SerializeField]
     private GameObject projectilePrefab;
