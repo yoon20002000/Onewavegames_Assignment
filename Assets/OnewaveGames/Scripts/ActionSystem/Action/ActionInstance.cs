@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
+[Serializable]
 public class ActionInstance
 {
     public ActionData Data { get; private set; }
@@ -24,7 +25,7 @@ public class ActionInstance
         ActionRange = data.ActionRange;
         ActionCooldown = data.Cooldown;
         InputID = inputID;
-        ActionTag = data.eActionTag;
+        ActionTag = data.ActionTag;
     }
 
     public virtual bool CanStartAction()

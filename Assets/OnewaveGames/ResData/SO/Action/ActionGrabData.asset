@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b31a415878665f04a9e50634487e13a2, type: 3}
-  m_Name: Action_Grab
+  m_Script: {fileID: 11500000, guid: 8fef1f7ecee676447bfbb3332460cb57, type: 3}
+  m_Name: ActionGrabData
   m_EditorClassIdentifier: 
-  ActionRange: 10
+  eActionTag: 0
+  ActionRange: 0
   ActionValue: 0
   ApplyEffects: []
-  Cooldown: 5
-  CostEffect: {fileID: 0}
+  Cooldown: 0
+  EffectCost: {fileID: 0}

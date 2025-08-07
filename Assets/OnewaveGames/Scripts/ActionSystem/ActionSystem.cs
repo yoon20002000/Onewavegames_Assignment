@@ -41,7 +41,7 @@ public class ActionSystem : MonoBehaviour
    public void AddAction(Actor instigator, ActionData actionData, Hash128 inputID = default)
    {
       ActionInstance newAction = actionData.CreateInstance(this, inputID);
-      addedActions[actionData.eActionTag] = newAction;
+      addedActions[actionData.ActionTag] = newAction;
    }
 
    public void StartAction(EGameplayTag_Action eActionTag)

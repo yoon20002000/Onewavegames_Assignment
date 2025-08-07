@@ -153,3 +153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a7251129f7140a4ca12304955f477da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnHit:
+    m_PersistentCalls:
+      m_Calls: []
+  applyEffects:
+  - {fileID: 11400000, guid: 19220da99784ad14092a581117ad9c81, type: 2}

@@ -3,10 +3,21 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActionEffectData", menuName = "Scriptable Objects/ActionEffectData")]
 public class ActionEffectData : ScriptableObject
 {
-    public ActionEffectCreateType eEffectTInstanceType;
-    public float Value;
-    public float Duration = 1f;
-    public float Period = 1f;
+    [SerializeField]
+    private ActionEffectCreateType eEffectInstanceType;
+    public ActionEffectCreateType EffectInstanceType => eEffectInstanceType;
+    
+    [SerializeField]
+    private float value;
+    public float Value => value;
+    [SerializeField]
+    private float duration = 1f;
+    public float Duration => duration;
+    
+    [SerializeField]
+    private float period = 1f;
+    public float Period => period;
+    
     public virtual ActionEffectInstance CreateInstance(ActionSystem system)
     {
         return new ActionEffectInstance(this, system);

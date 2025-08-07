@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultActionData:
-  - actionData: {fileID: 11400000, guid: 69d97feb56f63e547ba5b7bef1b0173e, type: 2}
+  - actionData: {fileID: 11400000, guid: 0be6a024a8f31cb4eb7cf02965d6bb9a, type: 2}
     inputAction: {fileID: -125659554464925083, guid: 9a3265bf17098314897e17219cb04e54, type: 3}
 --- !u!114 &6021766603517683200
 MonoBehaviour:
@@ -206,4 +206,3 @@ MonoBehaviour:
   maxHP: 100
   maxMP: 100
   grabSkillInput: {fileID: -125659554464925083, guid: 9a3265bf17098314897e17219cb04e54, type: 3}
-  inputActionAsset: {fileID: -944628639613478452, guid: 9a3265bf17098314897e17219cb04e54, type: 3}

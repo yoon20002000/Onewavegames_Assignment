@@ -2,5 +2,7 @@ using UnityEngine;
 
 public class ActionEffectCostData : ActionEffectData
 {
-    public ActionEffectCostType CostType;
+    [SerializeField]
+    private ActionEffectCostType costType;
+    public ActionEffectCostType CostType => costType;
 }
