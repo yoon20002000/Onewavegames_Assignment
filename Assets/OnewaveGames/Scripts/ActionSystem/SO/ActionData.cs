@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ActionData", menuName = "Scriptable Objects/ActionData")]
 public class ActionData : ScriptableObject
 {
-    public float actionRange;
-    public float actionValue;
+    public float ActionRange;
+    public float ActionValue;
 
-    public List<ActionData> applyEffects;
+    public List<ActionData> ApplyEffects;
 
-    public float CoolTime;
-    public ActionData CostEffect;
+    public float Cooldown;
+    public ActionEffectData CostEffect;
 
     public virtual ActionInstance CreateInstance(ActionSystem system)
     {

@@ -6,7 +6,7 @@ using UnityEngine.Assertions;
 
 public class ActionSystem : MonoBehaviour
 {
-   protected Actor OwnerActor;
+   protected Actor ownerActor;
 
    [SerializeField]
    protected List<ActionData> defaultActionData = new List<ActionData>();
@@ -14,11 +14,13 @@ public class ActionSystem : MonoBehaviour
    private List<ActionInstance> addActions = new List<ActionInstance>();
    private void Awake()
    {
-      OwnerActor = GetComponent<Actor>();
-      if (OwnerActor == null)
+      ownerActor = GetComponent<Actor>();
+      
+      Assert.IsNotNull(ownerActor, "OwnerActor is null. Check Attach Actor Component.");
+      
+      if (ownerActor == null)
       {
-         Assert.IsNotNull(OwnerActor, "OwnerActor is null. Check Attach Actor Component.");
-         OwnerActor = this.AddComponent<Actor>();
+         ownerActor = this.AddComponent<Actor>();
       }
    }
 
