@@ -9,12 +9,16 @@ public abstract class Skill
     public Actor OwnerActor { get; private set; }
     public SkillSystem OwnerSkillSystem { get; private set; }
     public bool bIsRunning { get; private set; } = false;
-    public virtual void InitializeSkill(Actor inOwnerActor, SkillData inSkillData)
+
+    public Hash128 InputID { get; private set; }
+
+    public virtual void InitializeSkill(Actor inOwnerActor, SkillData inSkillData, Hash128 inputID = default)
     {
         ApplySkillData = inSkillData;
         OwnerActor = inOwnerActor;
         OwnerSkillSystem = OwnerActor.ActorSkillSystem;
         bIsRunning = false;
+        InputID = inputID;
     }
 
     public virtual bool CanApplySkill()

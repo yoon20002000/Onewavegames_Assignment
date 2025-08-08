@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "New SkillData", menuName = "Skill ScriptableObject/SkillData")]
 public class SkillData : ScriptableObject
@@ -16,7 +17,7 @@ public class SkillData : ScriptableObject
     [SerializeField]
     private string skillDescription ="스킬 설명"; 
     public string SkillDescription => skillDescription;
-
+    
     [Header("스킬 속성")]
     [SerializeField]
     private float range;

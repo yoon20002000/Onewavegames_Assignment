@@ -3,13 +3,13 @@ using UnityEngine.Events;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(SkillSystem))]
-public abstract class Actor : MonoBehaviour
+public class Actor : MonoBehaviour
 {
-
     #region Attribute region
     [Header("기본 스텟 설정")]
     private float curHP;
     public float CurHP => curHP;
+    [SerializeField]
     private float maxHP;
     public float MaxHP => maxHP;
     private UnityEvent<float> onMaxHPChanged = new UnityEvent<float>();
@@ -17,6 +17,7 @@ public abstract class Actor : MonoBehaviour
     
     private float curMP;
     public float CurMP => curMP;
+    [SerializeField]
     private float maxMP;
     public float MaxMP => maxMP;
     private UnityEvent<float> onHPChange = new UnityEvent<float>();
@@ -70,16 +71,16 @@ public abstract class Actor : MonoBehaviour
     
     #region ActionSystem region
 
-    private SkillSystem _skillSystem;
-    public SkillSystem ActorSkillSystem => _skillSystem;
+    private SkillSystem skillSystem;
+    public SkillSystem ActorSkillSystem => skillSystem;
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        if (_skillSystem == null)
+        if (skillSystem == null)
         {
-            _skillSystem = GetComponent<SkillSystem>();
+            skillSystem = GetComponent<SkillSystem>();
         }
-        _skillSystem.InitializeActionSystem(this);
+        skillSystem.InitializeActionSystem(this);
     }
 
     #endregion
