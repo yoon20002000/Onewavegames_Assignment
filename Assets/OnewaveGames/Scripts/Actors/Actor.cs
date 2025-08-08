@@ -54,9 +54,9 @@ public class Actor : MonoBehaviour
         setHP(curHP + heal);
     }
 
-    public void AddMaxHP(float maxHpValue)
+    public void AddMaxHP(float value)
     {
-        setMaxHP(curHP + maxHpValue);
+        setMaxHP(curHP + value);
     }
 
     private void setMP(float mp)
@@ -69,6 +69,11 @@ public class Actor : MonoBehaviour
     {
         maxMP = Mathf.Max(MIN_MP, inMaxMP);
         onMaxMPChanged.Invoke(maxMP);
+    }
+
+    public void AddMaxMP(float value)
+    {
+        setMaxMP(maxMP + value);
     }
     
     public void ConsumeMP(float amount)
@@ -92,6 +97,9 @@ public class Actor : MonoBehaviour
             skillSystem = GetComponent<SkillSystem>();
         }
         skillSystem.InitializeActionSystem(this);
+        
+        setHP(maxHP);
+        setMP(maxMP);
     }
 
     #endregion

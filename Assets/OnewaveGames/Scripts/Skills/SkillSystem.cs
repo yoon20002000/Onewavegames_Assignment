@@ -144,14 +144,52 @@ public class SkillSystem : MonoBehaviour
             return true;
         }
         
+        CostEffect costEffect = GetOrCreateCostEffect(costEffectData);
+
+        return costEffect.CanApply(ownerActor,ownerActor);
+    }
+
+    public CostEffect GetOrCreateCostEffect(CostEffectData costEffectData)
+    {
         if (!cachedEffects.TryGetValue(costEffectData, out var costEffect))
         {
             costEffect = new CostEffect();
             cachedEffects.Add(costEffectData, costEffect);
         }
         costEffect.InitializeEffect(costEffectData);
+        return costEffect;
+    }
 
-        return costEffect.CanApply(ownerActor,ownerActor);
+    public void ApplyCostEffectData(List<CostEffectData> costEffectDatas)
+    {
+        foreach (var costEffectData in costEffectDatas)
+        {
+            ApplyCostEffectData(costEffectData);
+        }
+    }
+    public void ApplyCostEffectData(CostEffectData costEffectData)
+    {
+        CostEffect costEffect = GetOrCreateCostEffect(costEffectData);
+        ApplyCostEffect(costEffect);
+    }
+    public void ApplyCostEffects(List<CostEffect> costEffects)
+    {
+        foreach (var costEffect in costEffects)
+        {
+            CostEffectData costEffectData = costEffect.CostEffectData;
+
+            if (costEffectData == null)
+            {
+                return;
+            }
+
+            if (!costEffect.CanApply(ownerActor, ownerActor))
+            {
+                return;
+            }
+            costEffect.PreApply();
+            costEffect.Apply(ownerActor, ownerActor);
+        }
     }
     public void ApplyCostEffect(CostEffect costEffect)
     {
@@ -176,7 +214,10 @@ public class SkillSystem : MonoBehaviour
     {
         if (haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
         {
-            skill.StartSkill();
+            if (skill.CanApplySkill())
+            {
+                skill.StartSkill();    
+            }
         }
     }
 

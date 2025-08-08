@@ -9,6 +9,7 @@ public class Skill_Grab : Skill
 
     public override void StartSkill()
     {
+        base.StartSkill();
         Debug.Log("Skill Grab Start");
         ApplySkill(OwnerActor,null);
     }
@@ -18,7 +19,16 @@ public class Skill_Grab : Skill
         Debug.Log("Skill Grab apply");
         // ge 들 처리
         
+        return true;
+    }
 
+    public override bool CanApplySkill()
+    {
+        if (!base.CanApplySkill())
+        {
+            return false;
+        }
+        
         return true;
     }
 

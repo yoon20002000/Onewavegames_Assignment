@@ -14,11 +14,13 @@ public class CostEffect
     
     public virtual void PreApply()
     {
-        
+        Assert.IsTrue(costEffectData.EffectData.EffectType == EEffectType.Cost, 
+            "Cost Effect의 Type 설정 오류. Cost로 설정해주십시오. CostEffectData Name : " + costEffectData.EffectData);
     }
 
     public virtual void Apply(Actor source, Actor target)
     {
+        Debug.Log("Pay Cost Effect");
         if (source == null || source.ActorSkillSystem == null)
         {
             return;
@@ -47,10 +49,11 @@ public class CostEffect
             }
             case ECostEffectType.MaxMP:
             {
-                source.ConsumeMP(-costEffectData.EffectData.Value) ;
+                source.AddMaxMP(-costEffectData.EffectData.Value) ;
                 break;
             }
         }
+        Debug.Log("Pay Cost Effect done : " + costEffectData.ECostEffectType);
     }
     // modifier가 없어서 발생 됨
     // attribute가 리플렉션 돼서 각자 설정이 가능했다면 그냥 effect로 만들었을 듯 함.
