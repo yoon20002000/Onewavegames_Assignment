@@ -17,7 +17,9 @@ public class Skill_Grab : Skill
     public override bool ApplySkill(Actor source, Actor target)
     {
         Debug.Log("Skill Grab apply");
-        // ge 들 처리
+        
+        OwnerSkillSystem.ApplyEffectData(ApplySkillData.Effects, source, target);
+        
         
         return true;
     }
@@ -26,7 +28,7 @@ public class Skill_Grab : Skill
     {
         if (!base.CanApplySkill())
         {
-            Debug.Log("Skill " + nameof(Skill_Grab) + " cannot apply by cost");
+            Debug.Log("Skill " + nameof(Skill_Grab) + " not applied");
             return false;
         }
         

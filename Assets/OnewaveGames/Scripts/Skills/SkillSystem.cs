@@ -64,6 +64,8 @@ public class SkillSystem : MonoBehaviour
         }
     }
 
+    #region Unity Events region
+
     private void Awake()
     {
         if (ownerActor == null)
@@ -72,6 +74,16 @@ public class SkillSystem : MonoBehaviour
             Assert.IsNotNull(ownerActor, "Owner Actor Component is not set.");
         }
     }
+
+    private void Update()
+    {
+        foreach (var skill in haveSkills.Values)
+        {
+            skill.UpdateCooldown(Time.deltaTime);
+        }
+    }
+
+    #endregion
 
     #region Input Bind region
 
@@ -135,7 +147,7 @@ public class SkillSystem : MonoBehaviour
 
     #region Cost region
 
-    private Dictionary<CostEffectData,CostEffect> cachedEffects = new Dictionary<CostEffectData,CostEffect>(4);
+    private Dictionary<CostEffectData,CostEffect> cachedCostEffects = new Dictionary<CostEffectData,CostEffect>(4);
     
     public bool CanPayCost(CostEffectData costEffectData)
     {
@@ -151,10 +163,10 @@ public class SkillSystem : MonoBehaviour
 
     public CostEffect GetOrCreateCostEffect(CostEffectData costEffectData)
     {
-        if (!cachedEffects.TryGetValue(costEffectData, out var costEffect))
+        if (!cachedCostEffects.TryGetValue(costEffectData, out var costEffect))
         {
             costEffect = new CostEffect();
-            cachedEffects.Add(costEffectData, costEffect);
+            cachedCostEffects.Add(costEffectData, costEffect);
         }
         costEffect.InitializeEffect(costEffectData);
         return costEffect;
@@ -236,4 +248,31 @@ public class SkillSystem : MonoBehaviour
             }
         }
     }
+
+    #region Effect region
+    private Dictionary<EffectData, Effect> cachedEffects = new Dictionary<EffectData, Effect>();
+    public Effect GetOrCreateEffect(EffectData effectData)
+    {
+        if (!cachedEffects.TryGetValue(effectData, out var effect))
+        {
+            effect = effectData.CreateEffect();
+            cachedEffects.Add(effectData, effect);
+        }
+        
+        return effect;
+    }
+    public void ApplyEffectData(List<EffectData> effects, Actor source, Actor target)
+    {
+        foreach (var effectData in effects)
+        {
+            Effect effect = GetOrCreateEffect(effectData);
+            if (effect.CanApply(source, target))
+            {
+                effect.PreApply();
+                effect.Apply(source, target);
+            }
+        }
+    }
+
+    #endregion
 }

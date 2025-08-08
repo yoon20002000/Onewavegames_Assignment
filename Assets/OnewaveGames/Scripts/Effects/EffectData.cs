@@ -19,4 +19,9 @@ public class EffectData
     [SerializeField]
     private string customData;
     public string CustomData=>customData;
+
+    public virtual Effect CreateEffect()
+    {
+        return new Effect_Default(this);
+    }
 }

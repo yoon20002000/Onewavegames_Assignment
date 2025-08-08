@@ -8,11 +8,10 @@ public abstract class Effect
     [Header("이펙트 정보")]
     protected EffectData effectData;
 
-    public virtual void InitializeEffect(EffectData inEffectData)
+    public Effect(EffectData inEffectData)
     {
         effectData = inEffectData;
     }
-    
     public virtual void PreApply()
     {
         

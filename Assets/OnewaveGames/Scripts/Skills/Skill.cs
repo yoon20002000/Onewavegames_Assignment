@@ -12,6 +12,8 @@ public abstract class Skill
 
     public Hash128 InputID { get; private set; }
 
+    private float curCooldown;
+
     public virtual void InitializeSkill(Actor inOwnerActor, SkillData inSkillData, Hash128 inputID = default)
     {
         ApplySkillData = inSkillData;
@@ -23,7 +25,7 @@ public abstract class Skill
 
     public virtual bool CanApplySkill()
     {
-        if (bIsRunning || !CanPayCost())
+        if (bIsRunning || !CanPayCost() || IsCooldown())
         {
             return false;
         }
@@ -34,6 +36,7 @@ public abstract class Skill
     public virtual void StartSkill()
     {
         OwnerSkillSystem.ApplyCostEffectData(ApplySkillData.CostEffectData);
+        curCooldown = ApplySkillData.Cooldown;
     }
     public abstract bool ApplySkill(Actor source, Actor target);
     
@@ -41,6 +44,7 @@ public abstract class Skill
     {
         bIsRunning = false;
     }
+    
     public bool CanPayCost()
     {
         foreach (var costEffectData in ApplySkillData.CostEffectData)
@@ -53,4 +57,16 @@ public abstract class Skill
 
         return true;
     }
+
+    #region Cooldown region
+    public void UpdateCooldown(float deltaTime)
+    {
+        curCooldown -= deltaTime;
+    }
+    public bool IsCooldown()
+    {
+        return curCooldown > 0;
+    }
+
+    #endregion
 }
