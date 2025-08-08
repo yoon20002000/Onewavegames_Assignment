@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Assertions;
+using UnityEngine.InputSystem;
 
 public class Skill_Grab : Skill
 {
@@ -17,13 +19,21 @@ public class Skill_Grab : Skill
     public override bool ApplySkill(Actor source, Actor target)
     {
         Debug.Log($"{nameof(Skill_Grab)} Applying : {ApplySkillData.SkillName}");
+
+        Ray mouseRay = GameUtils.CreateRayFromMousePosition(Mouse.current.position.ReadValue());
+        if (GameUtils.TryGetRaycastHitPosition(mouseRay, out Vector3 hitPosition))
+        {
+            Vector3 dir = GameUtils.CalculateDirection(source.transform.position,hitPosition, true);
+            Debug.DrawLine(source.AttackSocket.position, source.AttackSocket.position + dir * 5, Color.green, 5);
+            source.transform.forward = dir;
+        }
         
         // Effect들을 순차적으로 적용
         OwnerSkillSystem.ApplyEffectData(ApplySkillData.Effects, source, target);
-        
+
         // 스킬 실행 완료
         CompleteSkill();
-        
+
         return true;
     }
 
@@ -34,7 +44,7 @@ public class Skill_Grab : Skill
             Debug.LogWarning($"{nameof(Skill_Grab)} cannot be applied - Check cooldown, cost, or running state");
             return false;
         }
-        
+
         return true;
     }
 
@@ -42,7 +52,7 @@ public class Skill_Grab : Skill
     {
         Debug.Log($"{nameof(Skill_Grab)} Completed : {ApplySkillData.SkillName}");
     }
-    
+
     protected override void onCooldownComplete()
     {
         Debug.Log($"{nameof(Skill_Grab)} Cooldown Complete : {ApplySkillData.SkillName}");

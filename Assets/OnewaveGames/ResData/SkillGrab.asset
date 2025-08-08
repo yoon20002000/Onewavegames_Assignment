@@ -22,10 +22,10 @@ MonoBehaviour:
   cooldown: 5
   effects:
   - eEffectType: 0
-    value: 1000
-    duration: 10
+    value: 50
+    duration: 5
     customData: 
     prefab: {fileID: 2970352368232555968, guid: 58e79eceeeef521409a5b1c4d7bed232, type: 3}
   costEffectData:
   - eCostEffectType: 3
-    value: 50
+    value: 10
