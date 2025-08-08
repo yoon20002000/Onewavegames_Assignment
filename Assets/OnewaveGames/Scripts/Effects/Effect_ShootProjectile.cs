@@ -19,6 +19,8 @@ public class Effect_ShootProjectile : Effect
         GameObject projectileInstance = GameObject.Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
         projectile.Initialize(OwnerSkillSystem.OwnerActor, shootDir, shootPower);
+        
+        EndEffect();
     }
 
     public override bool CanApply(Actor source, Actor target)

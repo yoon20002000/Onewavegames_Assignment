@@ -266,14 +266,22 @@ public class SkillSystem : MonoBehaviour
     {
         foreach (var effectData in effects)
         {
-            Effect effect = GetOrCreateEffect(effectData);
-            if (effect.CanApply(source, target))
-            {
-                effect.PreApply();
-                effect.Apply(source, target);
-            }
+            ApplyEffectData(effectData, source, target);
         }
     }
 
+    public void ApplyEffectData(EffectData effectData, Actor source, Actor target)
+    {
+        if (effectData == null)
+        {
+            return;
+        }
+        Effect effect = GetOrCreateEffect(effectData);
+        if (effect.CanApply(source, target))
+        {
+            effect.PreApply();
+            effect.Apply(source, target);
+        }
+    }
     #endregion
 }

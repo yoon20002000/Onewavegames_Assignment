@@ -10,11 +10,15 @@ public abstract class Effect
 
     private SkillSystem ownerSkillSystem;
     public SkillSystem OwnerSkillSystem => ownerSkillSystem;
+    
+    public bool bIsRunning { get; private set; }
     public Effect(SkillSystem skillSystem ,EffectData inEffectData)
     {
         ownerSkillSystem = skillSystem;
         effectData = inEffectData;
+        bIsRunning = false;
     }
+
     public virtual void PreApply()
     {
         
@@ -23,6 +27,11 @@ public abstract class Effect
 
     public virtual bool CanApply(Actor source, Actor target)
     {
-        return true;
+        return !bIsRunning;
+    }
+
+    public virtual void EndEffect()
+    {
+        bIsRunning = false;
     }
 }

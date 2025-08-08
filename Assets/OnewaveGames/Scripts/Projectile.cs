@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -40,8 +41,20 @@ public class Projectile : MonoBehaviour
     }
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(nameof(Projectile)+"Collision enter :" + other.gameObject.name);
-        ActorCollider hitActorCollider = other.gameObject.GetComponent<ActorCollider>();
+        applyEffect(other);
+        
+        Destroy(this.gameObject);
+    }
+
+    private void applyEffect(Collision collision)
+    {
+        if (effectData == null)
+        {
+            return;
+        }
+        
+        Debug.Log(nameof(Projectile)+"Collision enter :" + collision.gameObject.name);
+        ActorCollider hitActorCollider = collision.gameObject.GetComponent<ActorCollider>();
         if (hitActorCollider == null)
         {
             return;
@@ -53,8 +66,6 @@ public class Projectile : MonoBehaviour
             return;
         }
         
-        Debug.Log("부여한 GE 발동");
-        
-        Destroy(this.gameObject);
+        hitActor.ActorSkillSystem.ApplyEffectData(effectData, ownerActor, hitActor);
     }
 }
