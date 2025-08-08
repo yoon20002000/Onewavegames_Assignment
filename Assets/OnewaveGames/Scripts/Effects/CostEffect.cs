@@ -33,12 +33,12 @@ public class CostEffect
             }
             case ECostEffectType.HP:
             {
-                source.TakeDamage(costEffectData.Value) ;
+                source.TakeDamage(costEffectData.Value);
                 break;
             }
             case ECostEffectType.MaxHP:
             {
-                source.AddMaxHP(-costEffectData.Value) ;
+                source.AddMaxHP(-costEffectData.Value);
                 break;
             }
             case ECostEffectType.MP:
@@ -48,7 +48,7 @@ public class CostEffect
             }
             case ECostEffectType.MaxMP:
             {
-                source.AddMaxMP(-costEffectData.Value) ;
+                source.AddMaxMP(-costEffectData.Value);
                 break;
             }
         }
@@ -58,6 +58,11 @@ public class CostEffect
     // attribute가 리플렉션 돼서 각자 설정이 가능했다면 그냥 effect로 만들었을 듯 함.
     public virtual bool CanApply(Actor source, Actor target)
     {
+        if (source == null)
+        {
+            return false;
+        }
+        
         switch (costEffectData.ECostEffectType)
         {
             case ECostEffectType.None:
@@ -67,11 +72,11 @@ public class CostEffect
             }
             case ECostEffectType.HP:
             {
-                return source.CurHP >= costEffectData.Value;
+                return source.CurHP > costEffectData.Value;
             }
             case ECostEffectType.MaxHP:
             {
-                return source.MaxHP >= costEffectData.Value;
+                return source.MaxHP > costEffectData.Value;
             }
             case ECostEffectType.MP:
             {
@@ -79,7 +84,7 @@ public class CostEffect
             }
             case ECostEffectType.MaxMP:
             {
-                return source.MaxMP >= costEffectData.Value;
+                return source.MaxMP > costEffectData.Value;
             }
         }
     }

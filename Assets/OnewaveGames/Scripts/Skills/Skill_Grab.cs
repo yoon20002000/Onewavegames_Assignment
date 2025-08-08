@@ -7,18 +7,22 @@ public class Skill_Grab : Skill
         base.InitializeSkill(inOwnerActor, inSkillData, inputID);
     }
 
-    public override void StartSkill()
+    protected override void onSkillStarted()
     {
-        base.StartSkill();
-        Debug.Log("Skill Grab Start");
-        ApplySkill(OwnerActor,null);
+        Debug.Log($"{nameof(Skill_Grab)} Started : {ApplySkillData.SkillName}");
+        // 스킬 시작 시 즉시 실행
+        ApplySkill(OwnerActor, null);
     }
 
     public override bool ApplySkill(Actor source, Actor target)
     {
-        Debug.Log("Skill Grab apply");
+        Debug.Log($"{nameof(Skill_Grab)} Applying : {ApplySkillData.SkillName}");
         
+        // Effect들을 순차적으로 적용
         OwnerSkillSystem.ApplyEffectData(ApplySkillData.Effects, source, target);
+        
+        // 스킬 실행 완료
+        CompleteSkill();
         
         return true;
     }
@@ -27,16 +31,20 @@ public class Skill_Grab : Skill
     {
         if (!base.CanApplySkill())
         {
-            Debug.Log("Skill " + nameof(Skill_Grab) + " not applied");
+            Debug.LogWarning($"{nameof(Skill_Grab)} cannot be applied - Check cooldown, cost, or running state");
             return false;
         }
         
         return true;
     }
 
-    public override void CompleteSkill()
+    protected override void onSkillCompleted()
     {
-        Debug.Log("Skill Grab end");
-        base.CompleteSkill();
+        Debug.Log($"{nameof(Skill_Grab)} Completed : {ApplySkillData.SkillName}");
+    }
+    
+    protected override void onCooldownComplete()
+    {
+        Debug.Log($"{nameof(Skill_Grab)} Cooldown Complete : {ApplySkillData.SkillName}");
     }
 }

@@ -24,16 +24,28 @@ public class SkillSystem : MonoBehaviour
     [SerializeField]
     protected List<SkillDataWithInput> defaultSkills = new List<SkillDataWithInput>();
     
-    private Dictionary<string, Skill> haveSkills = new Dictionary<string, Skill>();
+    private readonly Dictionary<string, Skill> haveSkills = new Dictionary<string, Skill>();
 
     public void InitializeActionSystem(Actor actor)
     {
+        if (actor == null)
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : Cannot initialize with null actor");
+            return;
+        }
+        
         ownerActor = actor;
         initializeSkillsBySkillData();
     }
     
     private void initializeSkillsBySkillData()
     {
+        if (defaultSkills == null || defaultSkills.Count == 0)
+        {
+            Debug.LogWarning($"{this.gameObject.name} {nameof(SkillSystem)} : No skills configured");
+            return;
+        }
+        
         foreach (var skillData in defaultSkills)
         {
             if (skillData.Data != null)
@@ -41,6 +53,11 @@ public class SkillSystem : MonoBehaviour
                 if (!haveSkills.TryGetValue(skillData.Data.SkillName, out var skill))
                 {
                     skill = SkillFactory.CreateSkillBySkillTag(skillData.Data.SkillTag);
+                    if (skill == null)
+                    {
+                        Debug.LogError($"{nameof(SkillSystem)} : Failed to create skill for tag {skillData.Data.SkillTag}");
+                        continue;
+                    }
                     haveSkills.Add(skillData.Data.SkillName, skill);
                 }
 
@@ -62,7 +79,13 @@ public class SkillSystem : MonoBehaviour
                     skillData.InputActionRef.action.canceled += onInputCanceled;
                 }
             }
+            else
+            {
+                Debug.LogWarning($"{nameof(SkillSystem)} : Skill data is null in defaultSkills");
+            }
         }
+        
+        Debug.Log($"{nameof(SkillSystem)} : Initialized {haveSkills.Count} skills");
     }
 
     #region Unity Events region
@@ -78,22 +101,42 @@ public class SkillSystem : MonoBehaviour
 
     private void Update()
     {
-        foreach (var skill in haveSkills.Values)
+        if (haveSkills == null)
         {
-            skill.UpdateCooldown(Time.deltaTime);
+            return;
         }
         
-        foreach (var cachedEffect in cachedEffects.Values)
+        foreach (var skill in haveSkills.Values)
         {
-            cachedEffect.Update(Time.fixedDeltaTime);
+            if (skill != null)
+            {
+                skill.UpdateCooldown(Time.deltaTime);
+            }
+        }
+        
+        if (cachedEffects != null)
+        {
+            foreach (var cachedEffect in cachedEffects.Values)
+            {
+                if (cachedEffect != null)
+                {
+                    cachedEffect.Update(Time.fixedDeltaTime);
+                }
+            }
         }
     }
 
     private void FixedUpdate()
     {
-        foreach (var cachedEffect in cachedEffects.Values)
+        if (cachedEffects != null)
         {
-            cachedEffect.FixedUpdate(Time.fixedDeltaTime);
+            foreach (var cachedEffect in cachedEffects.Values)
+            {
+                if (cachedEffect != null)
+                {
+                    cachedEffect.FixedUpdate(Time.fixedDeltaTime);
+                }
+            }
         }
     }
 
@@ -118,13 +161,14 @@ public class SkillSystem : MonoBehaviour
         Hash128 inputID = GameUtils.GetInputActionHash(cct.action);
         HardwareInputCanceled(inputID);
     }
+    
     public void HardwareInputPerformed(Hash128 inputID)
     {
         foreach (var skill in haveSkills.Values) 
         {
-            if (skill.InputID == inputID)
+            if (skill != null && skill.InputID == inputID)
             {
-                Debug.Log("action performed : " + skill.ApplySkillData.SkillName);
+                Debug.Log($"action performed : {skill.ApplySkillData.SkillName}");
                 StartSkill(skill);
                 break;
             }
@@ -135,9 +179,9 @@ public class SkillSystem : MonoBehaviour
     {
         foreach (var skill in haveSkills.Values) 
         {
-            if (skill.InputID == inputID)
+            if (skill != null && skill.InputID == inputID)
             {
-                Debug.Log("action start : " + skill.ApplySkillData.SkillName);
+                Debug.Log($"action start : {skill.ApplySkillData.SkillName}");
                 StartSkill(skill);
                 break;
             }
@@ -148,10 +192,10 @@ public class SkillSystem : MonoBehaviour
     {
         foreach (var skill in haveSkills.Values) 
         {
-            if (skill.InputID == inputID)
+            if (skill != null && skill.InputID == inputID)
             {
-                Debug.Log("action stop : " + skill.ApplySkillData.SkillName);
-                CompleteSkill(skill);
+                Debug.Log($"action stop : {skill.ApplySkillData.SkillName}");
+                completeSkill(skill);
                 break;
             }
         }
@@ -177,6 +221,12 @@ public class SkillSystem : MonoBehaviour
 
     public CostEffect GetOrCreateCostEffect(CostEffectData costEffectData)
     {
+        if (costEffectData == null)
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : CostEffectData is null");
+            return null;
+        }
+        
         if (!cachedCostEffects.TryGetValue(costEffectData, out var costEffect))
         {
             costEffect = new CostEffect();
@@ -188,45 +238,81 @@ public class SkillSystem : MonoBehaviour
 
     public void ApplyCostEffectData(List<CostEffectData> costEffectDatas)
     {
+        if (costEffectDatas == null)
+        {
+            return;
+        }
+        
         foreach (var costEffectData in costEffectDatas)
         {
             ApplyCostEffectData(costEffectData);
         }
     }
+    
     public void ApplyCostEffectData(CostEffectData costEffectData)
     {
+        if (costEffectData == null)
+        {
+            return;
+        }
+        
         CostEffect costEffect = GetOrCreateCostEffect(costEffectData);
-        ApplyCostEffect(costEffect);
+        if (costEffect != null)
+        {
+            ApplyCostEffect(costEffect);
+        }
     }
+    
     public void ApplyCostEffects(List<CostEffect> costEffects)
     {
+        if (costEffects == null)
+        {
+            return;
+        }
+        
         foreach (var costEffect in costEffects)
         {
+            if (costEffect == null)
+            {
+                continue;
+            }
+            
             CostEffectData costEffectData = costEffect.CostEffectData;
 
             if (costEffectData == null)
             {
+                Debug.LogWarning($"{nameof(SkillSystem)} : CostEffect has null CostEffectData");
                 return;
             }
 
             if (!costEffect.CanApply(ownerActor, ownerActor))
             {
+                Debug.LogWarning($"{nameof(SkillSystem)} : Cannot apply cost effect {costEffectData.ECostEffectType}");
                 return;
             }
             applyCostEffect(costEffect);
         }
     }
+    
     public void ApplyCostEffect(CostEffect costEffect)
     {
+        if (costEffect == null)
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : CostEffect is null");
+            return;
+        }
+        
         CostEffectData costEffectData = costEffect.CostEffectData;
 
         if (costEffectData == null)
         {
+            Debug.LogError($"{nameof(SkillSystem)} : CostEffectData is null");
             return;
         }
 
         if (!costEffect.CanApply(ownerActor, ownerActor))
         {
+            Debug.LogWarning($"{nameof(SkillSystem)} : Cannot apply cost effect {costEffectData.ECostEffectType}");
             return;
         }
 
@@ -243,40 +329,80 @@ public class SkillSystem : MonoBehaviour
 
     public void StartSkill(Skill skill)
     {
-        if (haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        if (skill == null)
         {
-            if (skill.CanApplySkill())
-            {
-                skill.StartSkill();    
-            }
+            Debug.LogError($"{nameof(SkillSystem)} : Cannot start null skill");
+            return;
+        }
+        
+        if (!haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : Skill {skill.ApplySkillData.SkillName} not found in haveSkills");
+            return;
+        }
+        
+        if (skill.CanApplySkill())
+        {
+            skill.StartSkill();    
+        }
+        else
+        {
+            Debug.LogWarning($"{nameof(SkillSystem)} : Cannot start skill {skill.ApplySkillData.SkillName}");
         }
     }
 
-    public void CompleteSkill(Skill skill)
+    private void completeSkill(Skill skill)
     {
-        if (haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        if (skill == null)
         {
-            if (skill.bIsRunning)
-            {
-                skill.CompleteSkill();    
-            }
+            Debug.LogError($"{nameof(SkillSystem)} : Cannot complete null skill");
+            return;
+        }
+        
+        if (!haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : Skill {skill.ApplySkillData.SkillName} not found in haveSkills");
+            return;
+        }
+        
+        if (skill.bIsRunning)
+        {
+            skill.CompleteSkill();    
         }
     }
 
     #region Effect region
-    private Dictionary<EffectData, Effect> cachedEffects = new Dictionary<EffectData, Effect>();
+    private readonly Dictionary<EffectData, Effect> cachedEffects = new Dictionary<EffectData, Effect>();
+    
     public Effect GetOrCreateEffect(EffectData effectData)
     {
+        if (effectData == null)
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : EffectData is null");
+            return null;
+        }
+        
         if (!cachedEffects.TryGetValue(effectData, out var effect))
         {
             effect = EffectFactory.CreateEffect(this, effectData);
+            if (effect == null)
+            {
+                Debug.LogError($"{nameof(SkillSystem)} : Failed to create effect for type {effectData.EffectType}");
+                return null;
+            }
             cachedEffects.Add(effectData, effect);
         }
         
         return effect;
     }
+    
     public void ApplyEffectData(List<EffectData> effects, Actor source, Actor target)
     {
+        if (effects == null)
+        {
+            return;
+        }
+        
         foreach (var effectData in effects)
         {
             ApplyEffectData(effectData, source, target);
@@ -287,13 +413,25 @@ public class SkillSystem : MonoBehaviour
     {
         if (effectData == null)
         {
+            Debug.LogError($"{nameof(SkillSystem)} : EffectData is null");
             return;
         }
+        
         Effect effect = GetOrCreateEffect(effectData);
+        if (effect == null)
+        {
+            Debug.LogError($"{nameof(SkillSystem)} : Failed to get or create effect for {effectData.EffectType}");
+            return;
+        }
+        
         if (effect.CanApply(source, target))
         {
             effect.PreApply();
             effect.Apply(source, target);
+        }
+        else
+        {
+            Debug.LogWarning($"{nameof(SkillSystem)} : Cannot apply effect {effectData.EffectType}");
         }
     }
     #endregion

@@ -39,23 +39,37 @@ public class Projectile : MonoBehaviour
         curDuration += Time.deltaTime;
         if (curDuration >= projectileLifetime)
         {
+            Debug.Log($"{nameof(Projectile)} {name} destroyed due to lifetime expiration");
             Destroy(gameObject);
         }
     }
     
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log(nameof(Projectile)+"Collision enter :" + other.gameObject.name);
-        
-        ActorCollider hitActorCollider = other.gameObject.GetComponent<ActorCollider>();
-        if (hitActorCollider == null)
+        if (!bIsInitialized)
         {
             return;
         }
         
-        Actor hitActor = hitActorCollider.OwnerActor;
-        if (hitActor == null || hitActor == ownerActor)
+        Debug.Log($"{nameof(Projectile)} {name} Collision with: {other.gameObject.name}");
+        
+        ActorCollider hitActorCollider = other.gameObject.GetComponent<ActorCollider>();
+        if (hitActorCollider == null)
         {
+            Debug.Log($"{nameof(Projectile)} hit non-actor object: {other.gameObject.name}");
+            return;
+        }
+        
+        Actor hitActor = hitActorCollider.OwnerActor;
+        if (hitActor == null)
+        {
+            Debug.LogWarning($"{nameof(Projectile)} hit actor with null OwnerActor: {other.gameObject.name}");
+            return;
+        }
+        
+        if (hitActor == ownerActor)
+        {
+            Debug.Log($"{nameof(Projectile)} hit owner actor, ignoring");
             return;
         }
         
@@ -66,24 +80,58 @@ public class Projectile : MonoBehaviour
 
     #endregion
 
-    public void Initialize(Actor inOwnerActor,Vector3 dir, float power, float duration = 10)
+    public void Initialize(Actor inOwnerActor, Vector3 dir, float power, float duration = 10)
     {
-        curDuration = 0;
+        if (inOwnerActor == null)
+        {
+            Debug.LogError($"{nameof(Projectile)} Initialize : Owner actor is null");
+            return;
+        }
+        
+        if (rb == null)
+        {
+            Debug.LogError($"{nameof(Projectile)} Initialize : Rigidbody is null");
+            return;
+        }
+        
+        curDuration = 0f;
         ownerActor = inOwnerActor;
-        shootDir = dir;
+        shootDir = dir.normalized;
         shootPower = power;
         bIsInitialized = true;
-        rb.AddForce(shootDir * shootPower);
         projectileLifetime = duration;
+        
+        // 물리 기반 발사
+        rb.AddForce(shootDir * shootPower, ForceMode.Impulse);
+        
+        Debug.Log($"{nameof(Projectile)} {name} initialized with direction: {shootDir}, power: {power}");
     }
 
     private void applyEffect(Actor hitActor)
     {
         if (effectData == null)
         {
+            Debug.LogWarning($"{nameof(Projectile)} {name} : No effect data assigned");
             return;
         }
         
-        hitActor.ActorSkillSystem.ApplyEffectData(effectData, ownerActor, hitActor);
+        if (ownerActor?.ActorSkillSystem == null)
+        {
+            Debug.LogError($"{nameof(Projectile)} {name} : Owner actor or skill system is null");
+            return;
+        }
+        
+        Debug.Log($"{nameof(Projectile)} {name} applying effect to {hitActor.name}");
+        ownerActor.ActorSkillSystem.ApplyEffectData(effectData, ownerActor, hitActor);
+    }
+    
+    // 디버깅용 - 발사 방향 시각화
+    private void OnDrawGizmosSelected()
+    {
+        if (bIsInitialized)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position, shootDir * 2f);
+        }
     }
 }
