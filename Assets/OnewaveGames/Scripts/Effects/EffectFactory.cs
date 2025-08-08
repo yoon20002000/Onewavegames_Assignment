@@ -13,7 +13,7 @@ public static class EffectFactory
             }
             case EEffectType.Pull:
             {
-                return new Effect_FullObject(skillSystem,effectData);
+                return new Effect_PullObject(skillSystem,effectData);
                 
             }
             case EEffectType.Damage:
