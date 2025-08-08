@@ -29,6 +29,6 @@ MonoBehaviour:
   - eCostEffectType: 3
     effectData:
       eEffectType: 0
-      value: 10
+      value: 1000
       duration: 0
       customData: 

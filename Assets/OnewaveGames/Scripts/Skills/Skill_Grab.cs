@@ -26,6 +26,7 @@ public class Skill_Grab : Skill
     {
         if (!base.CanApplySkill())
         {
+            Debug.Log("Skill " + nameof(Skill_Grab) + " cannot apply by cost");
             return false;
         }
         

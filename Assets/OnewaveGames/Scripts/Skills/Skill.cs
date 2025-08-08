@@ -23,8 +23,7 @@ public abstract class Skill
 
     public virtual bool CanApplySkill()
     {
-        // 이건 action에서 처리할 것
-        if (bIsRunning && CanPayCost())
+        if (bIsRunning || !CanPayCost())
         {
             return false;
         }

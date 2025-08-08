@@ -187,8 +187,7 @@ public class SkillSystem : MonoBehaviour
             {
                 return;
             }
-            costEffect.PreApply();
-            costEffect.Apply(ownerActor, ownerActor);
+            applyCostEffect(costEffect);
         }
     }
     public void ApplyCostEffect(CostEffect costEffect)
@@ -204,7 +203,13 @@ public class SkillSystem : MonoBehaviour
         {
             return;
         }
-        
+
+        applyCostEffect(costEffect);
+    }
+
+    private void applyCostEffect(CostEffect costEffect)
+    {
+        costEffect.PreApply();
         costEffect.Apply(ownerActor, ownerActor);
     }
 
