@@ -135,9 +135,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 91990183117885744}
   effectData:
-    eEffectType: 0
-    value: 0
-    duration: 0
+    eEffectType: 1
+    value: 10
+    duration: 10
     customData: 
     prefab: {fileID: 0}
 --- !u!135 &6687874040367317244

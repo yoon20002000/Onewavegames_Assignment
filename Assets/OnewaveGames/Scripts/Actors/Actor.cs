@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.Events;
 
 [DisallowMultipleComponent]
@@ -86,9 +87,19 @@ public class Actor : MonoBehaviour
     [Space(10)]
     
     #region ActionSystem region
-
+    [Header("스킬 시스템")]
+    [SerializeField]
     private SkillSystem skillSystem;
     public SkillSystem ActorSkillSystem => skillSystem;
+    #endregion
+    #region Unity Method region
+
+    #region Socket region
+
+    [SerializeField]
+    private Transform attackSocket;
+    public Transform AttackSocket => attackSocket;
+    #endregion
 
     protected virtual void Awake()
     {
@@ -100,16 +111,9 @@ public class Actor : MonoBehaviour
         
         setHP(maxHP);
         setMP(maxMP);
+        
+        Assert.IsNotNull(attackSocket, "Attack Socket is null");
     }
 
     #endregion
-    public void ApplySkill(Actor target)
-    {
-        // skill 찾아서
-        // source에 this
-        // target에 target
-        // actionsystem에 이 두 변수를 전달
-        // action systme에서 can play check 후 apply
-        //actionSystem.ApplySkill(skill);
-    }
 }

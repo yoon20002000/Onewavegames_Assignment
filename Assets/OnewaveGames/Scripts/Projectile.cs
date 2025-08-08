@@ -14,7 +14,13 @@ public class Projectile : MonoBehaviour
     
     [SerializeField]
     private EffectData effectData;
-    
+
+    [SerializeField]
+    private float projectileLifetime;
+    private float curDuration = 0;
+
+    #region Unity Method region
+
     private void Awake()
     {
         if (rb == null)
@@ -23,38 +29,25 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    public void Initialize(Actor inOwnerActor,Vector3 dir, float power)
-    {
-        ownerActor = inOwnerActor;
-        shootDir = dir;
-        shootPower = power;
-        bIsInitialized = true;
-    }
-
-    private void FixedUpdate()
+    private void Update()
     {
         if (!bIsInitialized)
         {
             return;
         }
-        rb.AddForce(shootDir * shootPower);
+        
+        curDuration += Time.deltaTime;
+        if (curDuration >= projectileLifetime)
+        {
+            Destroy(gameObject);
+        }
     }
+    
     private void OnCollisionEnter(Collision other)
     {
-        applyEffect(other);
+        Debug.Log(nameof(Projectile)+"Collision enter :" + other.gameObject.name);
         
-        Destroy(this.gameObject);
-    }
-
-    private void applyEffect(Collision collision)
-    {
-        if (effectData == null)
-        {
-            return;
-        }
-        
-        Debug.Log(nameof(Projectile)+"Collision enter :" + collision.gameObject.name);
-        ActorCollider hitActorCollider = collision.gameObject.GetComponent<ActorCollider>();
+        ActorCollider hitActorCollider = other.gameObject.GetComponent<ActorCollider>();
         if (hitActorCollider == null)
         {
             return;
@@ -62,6 +55,31 @@ public class Projectile : MonoBehaviour
         
         Actor hitActor = hitActorCollider.OwnerActor;
         if (hitActor == null || hitActor == ownerActor)
+        {
+            return;
+        }
+        
+        applyEffect(hitActor);
+        
+        Destroy(this.gameObject);
+    }
+
+    #endregion
+
+    public void Initialize(Actor inOwnerActor,Vector3 dir, float power, float duration = 10)
+    {
+        curDuration = 0;
+        ownerActor = inOwnerActor;
+        shootDir = dir;
+        shootPower = power;
+        bIsInitialized = true;
+        rb.AddForce(shootDir * shootPower);
+        projectileLifetime = duration;
+    }
+
+    private void applyEffect(Actor hitActor)
+    {
+        if (effectData == null)
         {
             return;
         }

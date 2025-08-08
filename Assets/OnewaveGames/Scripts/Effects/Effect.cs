@@ -11,7 +11,7 @@ public abstract class Effect
     private SkillSystem ownerSkillSystem;
     public SkillSystem OwnerSkillSystem => ownerSkillSystem;
     
-    public bool bIsRunning { get; private set; }
+    public bool bIsRunning { get; protected set; }
     public Effect(SkillSystem skillSystem ,EffectData inEffectData)
     {
         ownerSkillSystem = skillSystem;
@@ -25,6 +25,14 @@ public abstract class Effect
     }
     public abstract void Apply(Actor source, Actor target);
 
+    public virtual void Update(float deltaTime)
+    {
+        
+    }
+    public virtual void FixedUpdate(float deltaTime)
+    {
+        
+    }
     public virtual bool CanApply(Actor source, Actor target)
     {
         return !bIsRunning;

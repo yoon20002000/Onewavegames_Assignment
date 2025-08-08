@@ -82,6 +82,19 @@ public class SkillSystem : MonoBehaviour
         {
             skill.UpdateCooldown(Time.deltaTime);
         }
+        
+        foreach (var cachedEffect in cachedEffects.Values)
+        {
+            cachedEffect.Update(Time.fixedDeltaTime);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        foreach (var cachedEffect in cachedEffects.Values)
+        {
+            cachedEffect.FixedUpdate(Time.fixedDeltaTime);
+        }
     }
 
     #endregion
