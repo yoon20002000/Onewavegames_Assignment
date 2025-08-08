@@ -4,7 +4,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New SkillData", menuName = "Skill ScriptableObject/SkillData")]
 public class SkillData : ScriptableObject
 {
-    [Header("기본 정보")]
+    [Header("기본 정보")] 
+    [SerializeField] 
+    private ESkillTag skillTag;
+    public ESkillTag SkillTag => skillTag;
+
     [SerializeField]
     private string skillName= "New Skill"; 
     public string  SkillName => skillName;
@@ -25,5 +29,11 @@ public class SkillData : ScriptableObject
     public float Cooldown => cooldown;
     
     [Header("효과 설정")]
-    List<EffectData> effects = new List<EffectData>();
+    [SerializeField]
+    private List<EffectData> effects = new List<EffectData>();
+    public List<EffectData> Effects => effects;
+    [Header("코스트 효과 설정")]
+    [SerializeField]
+    private List<EffectData> costEffects = new List<EffectData>();
+    public List<EffectData> CostEffects => costEffects;
 }
