@@ -31,17 +31,22 @@ public abstract class Skill
 
         return true;
     }
-    public abstract bool ApplySkill(Actor source, Actor target);
 
+    public abstract void StartSkill();
+    public abstract bool ApplySkill(Actor source, Actor target);
+    
     public virtual void CompleteSkill()
     {
         bIsRunning = false;
     }
     public bool CanPayCost()
     {
-        foreach (var costEffect in ApplySkillData.CostEffects)
+        foreach (var costEffectData in ApplySkillData.CostEffectData)
         {
-            //costEffect.
+            if (OwnerSkillSystem.CanPayCost(costEffectData))
+            {
+                
+            }
         }
 
         return true;

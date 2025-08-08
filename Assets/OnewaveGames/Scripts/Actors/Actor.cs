@@ -9,6 +9,8 @@ public class Actor : MonoBehaviour
     [Header("기본 스텟 설정")]
     private float curHP;
     public float CurHP => curHP;
+    private UnityEvent<float> onHPChanged = new UnityEvent<float>();
+    
     [SerializeField]
     private float maxHP;
     public float MaxHP => maxHP;
@@ -17,17 +19,19 @@ public class Actor : MonoBehaviour
     
     private float curMP;
     public float CurMP => curMP;
+    private UnityEvent<float> onMPChanged = new UnityEvent<float>();
     [SerializeField]
     private float maxMP;
     public float MaxMP => maxMP;
-    private UnityEvent<float> onHPChange = new UnityEvent<float>();
+    private UnityEvent<float> onMaxMPChanged = new UnityEvent<float>();
 
     protected const float MIN_HP = 1;
+    protected const float MIN_MP = 0;
     private void setHP(float hp)
     {
         
         curHP = Mathf.Clamp(hp, 0, maxHP);
-        onHPChange.Invoke(curHP);
+        onHPChanged.Invoke(curHP);
         if (curHP <= 0)
         {
             onDeath.Invoke();
@@ -36,7 +40,7 @@ public class Actor : MonoBehaviour
 
     private void setMaxHP(float inMaxHP)
     {
-        maxHP = Mathf.Clamp(maxHP, MIN_HP, inMaxHP);
+        maxHP = Mathf.Max(inMaxHP, MIN_HP);
         onMaxHPChanged.Invoke(maxHP);
     }
 
@@ -50,19 +54,26 @@ public class Actor : MonoBehaviour
         setHP(curHP + heal);
     }
 
-    public void AddMaxHP(float amount)
+    public void AddMaxHP(float maxHpValue)
     {
-        setMaxHP(curHP + amount);
+        setMaxHP(curHP + maxHpValue);
     }
 
-    public void AddMP(float amount)
+    private void setMP(float mp)
     {
-        setHP(curMP + amount);
+        curMP = Mathf.Clamp(mp, 0, maxHP);
+        onMPChanged.Invoke(curMP);
     }
-
+    
+    private void setMaxMP(float inMaxMP)
+    {
+        maxMP = Mathf.Max(MIN_MP, inMaxMP);
+        onMaxMPChanged.Invoke(maxMP);
+    }
+    
     public void ConsumeMP(float amount)
     {
-        setHP(curMP - amount);
+        setMP(curMP - amount);
     }
 
     #endregion

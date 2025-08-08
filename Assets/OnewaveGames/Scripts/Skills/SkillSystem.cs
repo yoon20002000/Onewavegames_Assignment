@@ -44,7 +44,7 @@ public class SkillSystem : MonoBehaviour
                 }
 
                 skill.InitializeSkill(ownerActor, skillData.Data,
-                    GameUtils.GetInputActionHash(skillData.InputActionRef));
+                    GameUtils.GetInputActionHash(skillData.InputActionRef.action));
 
                 if (skillData.bIsPerform)
                 {
@@ -72,7 +72,9 @@ public class SkillSystem : MonoBehaviour
             Assert.IsNotNull(ownerActor, "Owner Actor Component is not set.");
         }
     }
-    
+
+    #region Input Bind region
+
     private void onInputPerformed(InputAction.CallbackContext cct)
     {
         Hash128 inputID = GameUtils.GetInputActionHash(cct.action);
@@ -92,12 +94,12 @@ public class SkillSystem : MonoBehaviour
     }
     public void HardwareInputPerformed(Hash128 inputID)
     {
-        foreach (var action in haveSkills.Values) 
+        foreach (var skill in haveSkills.Values) 
         {
-            if (action.InputID == inputID)
+            if (skill.InputID == inputID)
             {
-                Debug.Log("action performed : " + action.ApplySkillData.SkillName);
-                //StartAction(action.ActionTag);
+                Debug.Log("action performed : " + skill.ApplySkillData.SkillName);
+                StartSkill(skill);
                 break;
             }
         }
@@ -105,12 +107,12 @@ public class SkillSystem : MonoBehaviour
 
     public void HardwareInputStart(Hash128 inputID)
     {
-        foreach (var action in haveSkills.Values) 
+        foreach (var skill in haveSkills.Values) 
         {
-            if (action.InputID == inputID)
+            if (skill.InputID == inputID)
             {
-                Debug.Log("action start : " + action.ApplySkillData.SkillName);
-                //StartAction(action.ActionTag);
+                Debug.Log("action start : " + skill.ApplySkillData.SkillName);
+                StartSkill(skill);
                 break;
             }
         }
@@ -118,13 +120,73 @@ public class SkillSystem : MonoBehaviour
 
     public void HardwareInputCanceled(Hash128 inputID)
     {
-        foreach (var action in haveSkills.Values) 
+        foreach (var skill in haveSkills.Values) 
         {
-            if (action.InputID == inputID)
+            if (skill.InputID == inputID)
             {
-                Debug.Log("action stop : " + action.ApplySkillData.SkillName);
-                //StopAction(action.ActionTag);
+                Debug.Log("action stop : " + skill.ApplySkillData.SkillName);
+                CompleteSkill(skill);
                 break;
+            }
+        }
+    }
+
+    #endregion
+
+    #region Cost region
+
+    private Dictionary<CostEffectData,CostEffect> cachedEffects = new Dictionary<CostEffectData,CostEffect>(4);
+    
+    public bool CanPayCost(CostEffectData costEffectData)
+    {
+        if (costEffectData == null)
+        {
+            return true;
+        }
+        
+        if (!cachedEffects.TryGetValue(costEffectData, out var costEffect))
+        {
+            costEffect = new CostEffect();
+            cachedEffects.Add(costEffectData, costEffect);
+        }
+        costEffect.InitializeEffect(costEffectData);
+
+        return costEffect.CanApply(ownerActor,ownerActor);
+    }
+    public void ApplyCostEffect(CostEffect costEffect)
+    {
+        CostEffectData costEffectData = costEffect.CostEffectData;
+
+        if (costEffectData == null)
+        {
+            return;
+        }
+
+        if (!costEffect.CanApply(ownerActor, ownerActor))
+        {
+            return;
+        }
+        
+        costEffect.Apply(ownerActor, ownerActor);
+    }
+
+    #endregion
+
+    public void StartSkill(Skill skill)
+    {
+        if (haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        {
+            skill.StartSkill();
+        }
+    }
+
+    public void CompleteSkill(Skill skill)
+    {
+        if (haveSkills.ContainsKey(skill.ApplySkillData.SkillName))
+        {
+            if (skill.bIsRunning)
+            {
+                skill.CompleteSkill();    
             }
         }
     }

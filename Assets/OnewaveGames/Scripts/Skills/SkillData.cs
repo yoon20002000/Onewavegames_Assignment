@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "New SkillData", menuName = "Skill ScriptableObject/SkillData")]
 public class SkillData : ScriptableObject
@@ -33,8 +34,9 @@ public class SkillData : ScriptableObject
     [SerializeField]
     private List<EffectData> effects = new List<EffectData>();
     public List<EffectData> Effects => effects;
+    [FormerlySerializedAs("costEffects")]
     [Header("코스트 효과 설정")]
     [SerializeField]
-    private List<EffectData> costEffects = new List<EffectData>();
-    public List<EffectData> CostEffects => costEffects;
+    private List<CostEffectData> costEffectData = new List<CostEffectData>();
+    public List<CostEffectData> CostEffectData => costEffectData;
 }
