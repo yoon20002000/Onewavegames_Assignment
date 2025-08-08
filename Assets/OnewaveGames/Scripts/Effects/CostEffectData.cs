@@ -8,6 +8,6 @@ public class CostEffectData
     public ECostEffectType ECostEffectType => eCostEffectType;
 
     [SerializeField]
-    private EffectData effectData;
-    public EffectData EffectData => effectData;
+    private float value;
+    public float Value => value;
 }

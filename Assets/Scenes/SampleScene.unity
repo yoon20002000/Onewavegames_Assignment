@@ -433,9 +433,17 @@ PrefabInstance:
       propertyPath: maxMP
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3054649642355689925, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3098159511229962582, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
       propertyPath: m_Name
       value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098159511229962582, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5653263193841610734, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -502,9 +510,17 @@ PrefabInstance:
       propertyPath: maxMP
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3054649642355689925, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3098159511229962582, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 3098159511229962582, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5143314398475900156, guid: 3408373463dc14a4fbbd567f7c204c90, type: 3}
       propertyPath: defaultSkills.Array.size

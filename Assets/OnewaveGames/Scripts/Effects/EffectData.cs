@@ -20,8 +20,7 @@ public class EffectData
     private string customData;
     public string CustomData=>customData;
 
-    public virtual Effect CreateEffect()
-    {
-        return new Effect_Default(this);
-    }
+    [SerializeField] 
+    private GameObject prefab;
+    public GameObject Prefab => prefab;
 }

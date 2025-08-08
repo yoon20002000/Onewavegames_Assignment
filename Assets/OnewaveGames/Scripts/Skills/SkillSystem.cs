@@ -19,6 +19,7 @@ public class SkillSystem : MonoBehaviour
 {
     
     private Actor ownerActor;
+    public Actor OwnerActor => ownerActor;
     [Header("스킬 정보")]
     [SerializeField]
     protected List<SkillDataWithInput> defaultSkills = new List<SkillDataWithInput>();
@@ -255,7 +256,7 @@ public class SkillSystem : MonoBehaviour
     {
         if (!cachedEffects.TryGetValue(effectData, out var effect))
         {
-            effect = effectData.CreateEffect();
+            effect = EffectFactory.CreateEffect(this, effectData);
             cachedEffects.Add(effectData, effect);
         }
         

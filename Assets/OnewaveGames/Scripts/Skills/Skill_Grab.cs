@@ -20,7 +20,6 @@ public class Skill_Grab : Skill
         
         OwnerSkillSystem.ApplyEffectData(ApplySkillData.Effects, source, target);
         
-        
         return true;
     }
 

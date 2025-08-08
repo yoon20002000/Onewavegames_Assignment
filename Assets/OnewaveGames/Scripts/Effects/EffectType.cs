@@ -1,6 +1,5 @@
 public enum EEffectType
 {
-    Cost,           // 자원 소모
     Projectile,     // 투사체 발사
     Pull,           // 끌어오기
     Damage,         // 데미지

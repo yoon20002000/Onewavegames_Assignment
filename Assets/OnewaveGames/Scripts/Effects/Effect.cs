@@ -8,8 +8,11 @@ public abstract class Effect
     [Header("이펙트 정보")]
     protected EffectData effectData;
 
-    public Effect(EffectData inEffectData)
+    private SkillSystem ownerSkillSystem;
+    public SkillSystem OwnerSkillSystem => ownerSkillSystem;
+    public Effect(SkillSystem skillSystem ,EffectData inEffectData)
     {
+        ownerSkillSystem = skillSystem;
         effectData = inEffectData;
     }
     public virtual void PreApply()
@@ -20,6 +23,6 @@ public abstract class Effect
 
     public virtual bool CanApply(Actor source, Actor target)
     {
-        return source != target && target != null;
+        return true;
     }
 }

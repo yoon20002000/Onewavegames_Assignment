@@ -14,8 +14,7 @@ public class CostEffect
     
     public virtual void PreApply()
     {
-        Assert.IsTrue(costEffectData.EffectData.EffectType == EEffectType.Cost, 
-            "Cost Effect의 Type 설정 오류. Cost로 설정해주십시오. CostEffectData Name : " + costEffectData.EffectData);
+        
     }
 
     public virtual void Apply(Actor source, Actor target)
@@ -34,22 +33,22 @@ public class CostEffect
             }
             case ECostEffectType.HP:
             {
-                source.TakeDamage(costEffectData.EffectData.Value) ;
+                source.TakeDamage(costEffectData.Value) ;
                 break;
             }
             case ECostEffectType.MaxHP:
             {
-                source.AddMaxHP(-costEffectData.EffectData.Value) ;
+                source.AddMaxHP(-costEffectData.Value) ;
                 break;
             }
             case ECostEffectType.MP:
             {
-                source.ConsumeMP(costEffectData.EffectData.Value);
+                source.ConsumeMP(costEffectData.Value);
                 break;
             }
             case ECostEffectType.MaxMP:
             {
-                source.AddMaxMP(-costEffectData.EffectData.Value) ;
+                source.AddMaxMP(-costEffectData.Value) ;
                 break;
             }
         }
@@ -68,19 +67,19 @@ public class CostEffect
             }
             case ECostEffectType.HP:
             {
-                return source.CurHP >= costEffectData.EffectData.Value;
+                return source.CurHP >= costEffectData.Value;
             }
             case ECostEffectType.MaxHP:
             {
-                return source.MaxHP >= costEffectData.EffectData.Value;
+                return source.MaxHP >= costEffectData.Value;
             }
             case ECostEffectType.MP:
             {
-                return source.CurMP >= costEffectData.EffectData.Value;
+                return source.CurMP >= costEffectData.Value;
             }
             case ECostEffectType.MaxMP:
             {
-                return source.MaxMP >= costEffectData.EffectData.Value;
+                return source.MaxMP >= costEffectData.Value;
             }
         }
     }
