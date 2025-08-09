@@ -9,26 +9,59 @@ public class SkillData : ScriptableObject
     [Header("기본 정보")] 
     [SerializeField] 
     private ESkillTag skillTag;
-    public ESkillTag SkillTag => skillTag;
+    public ESkillTag SkillTag 
+    { 
+        get => skillTag; 
+        set => skillTag = value; 
+    }
 
     [SerializeField]
     private string skillName= "New Skill"; 
-    public string  SkillName => skillName;
+    public string SkillName 
+    { 
+        get => skillName; 
+        set => skillName = value; 
+    }
     
     [SerializeField]
     private string skillDescription ="스킬 설명"; 
-    public string SkillDescription => skillDescription;
+    public string SkillDescription 
+    { 
+        get => skillDescription; 
+        set => skillDescription = value; 
+    }
+    
+    [Header("Icon 설정")]
+    [SerializeField]
+    private Sprite skillIcon;
+    public Sprite SkillIcon 
+    { 
+        get => skillIcon; 
+        set => skillIcon = value; 
+    }
     
     [Header("스킬 속성")]
     [SerializeField]
     private float range;
-    public float Range => range;
+    public float Range 
+    { 
+        get => range; 
+        set => range = value; 
+    }
     [SerializeField]
     private float value;
-    public float Value => value;
+    public float Value 
+    { 
+        get => value; 
+        set => this.value = value; 
+    }
     [SerializeField]
     private float cooldown;
-    public float Cooldown => cooldown;
+    public float Cooldown 
+    { 
+        get => cooldown; 
+        set => cooldown = value; 
+    }
     
     [Header("효과 설정")]
     [SerializeField]
