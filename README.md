@@ -241,7 +241,7 @@ public enum ECostEffectType
 이미지
 ```
 
-## 🎮 입력 시스템 연동
+## 입력 시스템 연동
 
 ### 1. Unity Input System 설정
 **이미지 첨부 필요**: Input Actions 설정 화면
@@ -518,3 +518,45 @@ public static GameObject GetGameObjectFromPool(string poolName, Vector3 position
     return ObjectPoolManager.Instance.Get(poolName, position, rotation);
 }
 ```
+## 커스텀 에디터 스크립트
+
+### 1. SkillDataInspectorEditor
+
+SkillData ScriptableObject를 위한 커스텀 Inspector 에디터로, 기획자가 쉽게 스킬을 편집할 수 있도록 설계됨.
+
+#### 주요 기능
+
+**기본 정보 섹션**
+- 스킬 이름, 설명, 타입 편집
+- **스킬 아이콘 설정**: UI에서 사용할 스프라이트 아이콘 지정
+- **아이콘 미리보기**: 64x64 크기로 실시간 미리보기 제공
+- 범위, 쿨다운, 기본 수치 설정
+
+**효과 설정 섹션**
+- 효과 개수 표시 및 관리
+- 효과 추가/삭제 버튼
+- 각 효과별 상세 설정:
+  - 효과 타입 (Damage, Heal, Projectile, Pull)
+  - 효과 수치
+  - 지속 시간
+  - 커스텀 데이터
+
+**비용 설정 섹션**
+- 비용 개수 표시 및 관리
+- 비용 추가/삭제 버튼
+- **중복 방지 시스템**: 동일한 비용 타입 중복 설정 방지
+- **최대 개수 제한**: ECostEffectType 개수에 따른 자동 제한
+
+**빠른 작업 섹션**
+- **템플릿 시스템**: 그랩, 데미지, 힐링 스킬 템플릿 제공
+- **초기화 기능**: 모든 데이터를 기본값으로 리셋
+- **Undo 지원**: 모든 작업에 Undo/Redo 지원
+
+#### 사용 방법
+
+1. **SkillData 선택**: Project 창에서 SkillData ScriptableObject 선택
+2. **섹션 접기/펼치기**: 각 섹션의 화살표로 접기/펼치기 가능
+3. **아이콘 설정**: "스킬 아이콘" 필드에 스프라이트 드래그 앤 드롭
+4. **효과 추가**: "+ 효과 추가" 버튼으로 새로운 효과 생성
+5. **비용 추가**: "+ 비용 추가" 버튼으로 새로운 비용 생성
+6. **템플릿 적용**: "빠른 작업" 섹션의 템플릿 버튼으로 빠른 설정

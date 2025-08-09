@@ -236,13 +236,6 @@ public class SkillDataInspectorEditor : Editor
                 var cost = skillData.CostEffectData[i];
                 EditorGUILayout.LabelField($"  {cost.ECostEffectType}: {cost.Value:F1}");
             }
-            
-            float totalCost = 0f;
-            for (int i = 0; i < skillData.CostEffectData.Count; i++)
-            {
-                totalCost += skillData.CostEffectData[i].Value;
-            }
-            EditorGUILayout.LabelField($"총합: {totalCost:F1}", EditorStyles.boldLabel);
         }
         
         EditorGUILayout.EndVertical();
@@ -565,7 +558,7 @@ public class SkillDataInspectorEditor : Editor
     
     private void resetSkillData()
     {
-        if (EditorUtility.DisplayDialog("초기화 확인", "모든 스킬 데이터를 초기화하시겠습니까?", "확인", "취소"))
+        if (EditorUtility.DisplayDialog("초기화 확인", "해당 스킬 데이터를 초기화하시겠습니까?", "확인", "취소"))
         {
             Undo.RecordObject(skillData, "Reset Skill Data");
             
@@ -583,6 +576,4 @@ public class SkillDataInspectorEditor : Editor
             AssetDatabase.SaveAssets();
         }
     }
-    
-
 }
