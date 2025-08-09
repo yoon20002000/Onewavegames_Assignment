@@ -3,6 +3,13 @@
 ## 개요
 SkillSystem은 확장 가능하고 데이터 기반의 스킬 시스템으로, 기획자가 수치와 옵션만 조정해서 다양한 스킬을 만들 수 있는 Unity 프레임워크입니다.
 
+## 현재 적용 상태
+ ![alt text](ReadmeResources/PlayerActor.png)
+- Player Actor 보유 스킬
+  1. Skill_Grab (Mouse Left Button) : 마우스 방향으로 투사체 발사 후. 투사체가 다른 Actor Hit 시 시전자 앞으로 끌고옴
+  2. Skill_Heal (Mouse Right Button) : 체력 회복
+  
+
 ## 시스템 아키텍처
 
 ### 핵심 컴포넌트 구조
@@ -10,7 +17,6 @@ SkillSystem은 확장 가능하고 데이터 기반의 스킬 시스템으로, �
 SkillSystem (MonoBehaviour)
 ├── Actor (MonoBehaviour) : 캐릭터 Actor
 │   ├── HP/MP 관리
-│   ├── 스킬 사용자 정보
 │   └── SkillSystem 참조
 ├── SkillData (ScriptableObject) : 스킬 정보 
 │   ├── 스킬 기본 정보
@@ -61,7 +67,7 @@ public class Actor : MonoBehaviour
     [SerializeField] 
     private SkillSystem skillSystem;
     [SerializeField] 
-    private Transform attackSocket; // 공격 위치
+    private Transform attackSocket; // 공격 생성 위치
     
     protected virtual void Awake()
     {
@@ -105,7 +111,7 @@ public class SkillSystem : MonoBehaviour
 **생성 단계:**
 1. Project 창에서 우클릭
 2. Create → Skill ScriptableObject → SkillData
-3. 파일명 지정 (예: "FireballSkill")
+3. 파일명 지정
 
 ### 2. SkillData 설정
 ![스킬 데이터](ReadmeResources/SkillData.png)
@@ -232,29 +238,29 @@ public enum ECostEffectType
 ```
 
 ### 2. 비용 설정 예시
-```csharp
-// MP 20 소모
-이미지
+#### HP 5 소모, MP 20 소모
+![코스트 이팩트 설정](ReadmeResources/SkillDataCostEffectSetting.png)
 
-
-// HP 5 소모 (자해 스킬)
-이미지
-```
 
 ## 입력 시스템 연동
 
 ### 1. Unity Input System 설정
-**이미지 첨부 필요**: Input Actions 설정 화면
+![스킬 인풋 액션](ReadmeResources/InputActions.png)
 
 **설정 단계:**
 1. Input Actions 에셋 생성
-2. Action Maps 생성 (예: "Player")
-3. Actions 생성 (예: "Fireball", "Heal")
-4. Binding 설정 (키보드, 마우스 등)
+2. Action Maps 생성 
+3. Actions 생성 
+4. Binding 설정 
 
 ### 2. SkillSystem에 입력 연결
-![스킬 시스템에서 디폴트 스킬 및 인풋 바인드](ReadmeResources/SkillSystem%20Input.png)
+![스킬 시스템에서 디폴트 스킬 및 인풋 바인드](ReadmeResources/SkillSystem%20Input.png)  
+**생성한 Action들의 Reference를 SkillSystem에 반영**
 
+**입력 이벤트 옵션:**
+- **bIsPerform**: 키를 누르고 있을 때 Start Skill
+- **bIsStart**: 키를 누르기 시작할 때 Start Skill
+- **bIsRelease**: 키를 놓을 때 Complete Skill
 ```csharp
 // SkillSystem의 defaultSkills에 추가
 private void initializeSkillsBySkillData()
@@ -308,28 +314,18 @@ private void initializeSkillsBySkillData()
 }
 ```
 
-**입력 이벤트 옵션:**
-- **bIsPerform**: 키를 누르고 있을 때 
-- **bIsStart**: 키를 누르기 시작할 때
-- **bIsRelease**: 키를 놓을 때
-
 ## 커스텀 스킬 구현
 
 ### 1. 새로운 스킬 클래스 생성
 ```csharp
-public class Skill_Fireball : Skill
+public class Skill_RangeAttack : Skill
 {
     public override bool ApplySkill(Actor source, Actor target)
     {
-        // 마우스 방향으로 발사
-        Ray mouseRay = GameUtils.CreateRayFromMousePosition(Mouse.current.position.ReadValue());
-        if (GameUtils.TryGetRaycastHitPosition(mouseRay, out Vector3 hitPosition))
-        {
-            Vector3 dir = GameUtils.CalculateDirection(source.transform.position, hitPosition, true);
-            source.transform.forward = dir;
-        }
+        // Skill 자체 value 값으로 직접 대미지
+        target.TakeDamage(source,ApplySkillData.value);
         
-        // 효과 적용
+        // 이외 적용된 효과 적용
         OwnerSkillSystem.ApplyEffectsFromEffectData(ApplySkillData.Effects, source, target);
         
         CompleteSkill();
@@ -337,8 +333,19 @@ public class Skill_Fireball : Skill
     }
 }
 ```
+### 2. 새로운 스킬 태그 추가
+```csharp
+public enum ESkillTag
+{
+    Skill_SelfTarget,
+    Skill_Grab,
+    Skill_RangeAttack,  // 새로 추가
+    Skill_Teleport,  // 새로 추가
+    Skill_Shield     // 새로 추가
+}
+```
 
-### 2. SkillFactory에 등록
+### 3. SkillFactory에 등록
 ```csharp
 public static class SkillFactory
 {
@@ -346,8 +353,8 @@ public static class SkillFactory
     {
         switch (eSkillTag)
         {
-            case ESkillTag.Skill_Fireball:
-                return new Skill_Fireball();
+            case ESkillTag.Skill_RangeAttack:
+                return new Skill_RangeAttack();
             case ESkillTag.Skill_SelfTarget:
                 return new Skill_SelfTarget();
             case ESkillTag.Skill_Grab:
@@ -356,18 +363,6 @@ public static class SkillFactory
                 return new Skill_SelfTarget();
         }
     }
-}
-```
-
-### 3. 새로운 스킬 태그 추가
-```csharp
-public enum ESkillTag
-{
-    Skill_SelfTarget,
-    Skill_Grab,
-    Skill_Fireball,  // 새로 추가
-    Skill_Teleport,  // 새로 추가
-    Skill_Shield     // 새로 추가
 }
 ```
 
@@ -427,17 +422,29 @@ public static class EffectFactory
         switch (effectData.EffectType)
         {
             case EEffectType.Burn:
-                return new Effect_Burn(skillSystem, effectData);
+                {
+                    return new Effect_Burn(skillSystem, effectData);
+                }
             case EEffectType.Damage:
-                return new Effect_Damage(skillSystem, effectData);
+                {
+                    return new Effect_Damage(skillSystem, effectData);
+                }
             case EEffectType.Heal:
-                return new Effect_Heal(skillSystem, effectData);
+                {
+                    return new Effect_Heal(skillSystem, effectData);
+                }
             case EEffectType.Projectile:
-                return new Effect_ShootProjectile(skillSystem, effectData);
+                {
+                    return new Effect_ShootProjectile(skillSystem, effectData);
+                }
             case EEffectType.Pull:
-                return new Effect_PullObject(skillSystem, effectData);
+                {
+                    return new Effect_PullObject(skillSystem, effectData);
+                }
             default:
-                return new Effect_Default(skillSystem, effectData);
+                {   
+                    return new Effect_Default(skillSystem, effectData);
+            |   }
         }
     }
 }
@@ -455,7 +462,7 @@ public enum EEffectType
 }
 ```
 
-## 🔧 고급 기능
+## 기타 기능
 
 ### 1. 조건부 스킬 실행
 ```csharp
@@ -519,7 +526,7 @@ public static GameObject GetGameObjectFromPool(string poolName, Vector3 position
 }
 ```
 ## 커스텀 에디터 스크립트
-
+![스킬 데이터 에디터](ReadmeResources/SkillData.png)
 ### 1. SkillDataInspectorEditor
 
 SkillData ScriptableObject를 위한 커스텀 Inspector 에디터로, 기획자가 쉽게 스킬을 편집할 수 있도록 설계됨.
@@ -549,7 +556,7 @@ SkillData ScriptableObject를 위한 커스텀 Inspector 에디터로, 기획자
 
 **빠른 작업 섹션**
 - **템플릿 시스템**: 그랩, 데미지, 힐링 스킬 템플릿 제공
-- **초기화 기능**: 모든 데이터를 기본값으로 리셋
+- **초기화 기능**: 해당 스킬 데이터를 기본값으로 리셋
 - **Undo 지원**: 모든 작업에 Undo/Redo 지원
 
 #### 사용 방법
