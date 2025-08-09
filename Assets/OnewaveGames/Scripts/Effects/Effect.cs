@@ -41,5 +41,6 @@ public abstract class Effect
     public virtual void EndEffect()
     {
         bIsRunning = false;
+        ownerSkillSystem.RemoveEffect(this);
     }
 }

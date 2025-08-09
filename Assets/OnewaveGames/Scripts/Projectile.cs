@@ -122,7 +122,7 @@ public class Projectile : MonoBehaviour
         }
         
         Debug.Log($"{nameof(Projectile)} {name} applying effect to {hitActor.name}");
-        ownerActor.ActorSkillSystem.ApplyEffectData(effectData, ownerActor, hitActor);
+        ownerActor.ActorSkillSystem.ApplyEffectFromEffectData(effectData, ownerActor, hitActor);
     }
     
     // 디버깅용 - 발사 방향 시각화

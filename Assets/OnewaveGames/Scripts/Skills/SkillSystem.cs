@@ -114,9 +114,9 @@ public class SkillSystem : MonoBehaviour
             }
         }
         
-        if (cachedEffects != null)
+        if (runningEffects != null)
         {
-            foreach (var cachedEffect in cachedEffects.Values)
+            foreach (var cachedEffect in runningEffects)
             {
                 if (cachedEffect != null)
                 {
@@ -128,9 +128,9 @@ public class SkillSystem : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (cachedEffects != null)
+        if (runningEffects != null)
         {
-            foreach (var cachedEffect in cachedEffects.Values)
+            foreach (var cachedEffect in runningEffects)
             {
                 if (cachedEffect != null)
                 {
@@ -372,9 +372,8 @@ public class SkillSystem : MonoBehaviour
     }
 
     #region Effect region
-    private readonly Dictionary<EffectData, Effect> cachedEffects = new Dictionary<EffectData, Effect>();
-    
-    public Effect GetOrCreateEffect(EffectData effectData)
+    private readonly List<Effect> runningEffects = new List<Effect>(10);
+    public Effect CreateEffectByEffectData(EffectData effectData)
     {
         if (effectData == null)
         {
@@ -382,21 +381,18 @@ public class SkillSystem : MonoBehaviour
             return null;
         }
         
-        if (!cachedEffects.TryGetValue(effectData, out var effect))
+        Effect effect = EffectFactory.CreateEffect(this, effectData);
+        if (effect == null)
         {
-            effect = EffectFactory.CreateEffect(this, effectData);
-            if (effect == null)
-            {
-                Debug.LogError($"{nameof(SkillSystem)} : Failed to create effect for type {effectData.EffectType}");
-                return null;
-            }
-            cachedEffects.Add(effectData, effect);
+            Debug.LogError($"{nameof(SkillSystem)} : Failed to create effect for type {effectData.EffectType}");
+            return null;
         }
+        runningEffects.Add( effect);
         
         return effect;
     }
     
-    public void ApplyEffectData(List<EffectData> effects, Actor source, Actor target)
+    public void ApplyEffectsFromEffectData(List<EffectData> effects, Actor source, Actor target)
     {
         if (effects == null)
         {
@@ -405,11 +401,11 @@ public class SkillSystem : MonoBehaviour
         
         foreach (var effectData in effects)
         {
-            ApplyEffectData(effectData, source, target);
+            ApplyEffectFromEffectData(effectData, source, target);
         }
     }
 
-    public void ApplyEffectData(EffectData effectData, Actor source, Actor target)
+    public void ApplyEffectFromEffectData(EffectData effectData, Actor source, Actor target)
     {
         if (effectData == null)
         {
@@ -417,7 +413,7 @@ public class SkillSystem : MonoBehaviour
             return;
         }
         
-        Effect effect = GetOrCreateEffect(effectData);
+        Effect effect = CreateEffectByEffectData(effectData);
         if (effect == null)
         {
             Debug.LogError($"{nameof(SkillSystem)} : Failed to get or create effect for {effectData.EffectType}");
@@ -432,6 +428,17 @@ public class SkillSystem : MonoBehaviour
         else
         {
             Debug.LogWarning($"{nameof(SkillSystem)} : Cannot apply effect {effectData.EffectType}");
+        }
+    }
+
+    public void RemoveEffect(Effect effect)
+    {
+        if (effect != null)
+        {
+            if (effect.bIsRunning)
+            {
+                runningEffects.Remove(effect);        
+            }
         }
     }
     #endregion

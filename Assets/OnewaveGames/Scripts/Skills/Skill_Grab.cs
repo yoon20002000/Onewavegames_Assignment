@@ -29,7 +29,7 @@ public class Skill_Grab : Skill
         }
         
         // Effect들을 순차적으로 적용
-        OwnerSkillSystem.ApplyEffectData(ApplySkillData.Effects, source, target);
+        OwnerSkillSystem.ApplyEffectsFromEffectData(ApplySkillData.Effects, source, target);
 
         // 스킬 실행 완료
         CompleteSkill();
