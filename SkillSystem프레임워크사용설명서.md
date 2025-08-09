@@ -8,30 +8,31 @@ SkillSystem은 확장 가능하고 데이터 기반의 스킬 시스템으로, �
 ### 핵심 컴포넌트 구조
 ```
 SkillSystem (MonoBehaviour)
-├── Actor (MonoBehaviour)
+├── Actor (MonoBehaviour) : 캐릭터 Actor
 │   ├── HP/MP 관리
 │   ├── 스킬 사용자 정보
 │   └── SkillSystem 참조
-├── SkillData (ScriptableObject)
+├── SkillData (ScriptableObject) : 스킬 정보 
 │   ├── 스킬 기본 정보
 │   ├── 효과 데이터 리스트
 │   └── 비용 데이터 리스트
-├── Skill (추상 클래스)
+├── Skill (추상 클래스)     : 상세 스킬 구현
 │   ├── Skill_SelfTarget
 │   ├── Skill_Grab
 │   └── 커스텀 스킬들
-├── Effect (추상 클래스)
+├── Effect (추상 클래스)    : 상세 이팩트 구현
 │   ├── Effect_Damage
 │   ├── Effect_Heal
 │   ├── Effect_ShootProjectile
 │   └── Effect_PullObject
-├── EffectData (Serializable)
+├── EffectData (Serializable) : 이팩트 데이터
 │   ├── 효과 타입
 │   ├── 효과 수치
 │   ├── 지속 시간
+│   ├── 커스텀 데이터
 │   └── 프리팹 참조
-└── CostEffectData (Serializable)
-    ├── 비용 타입 (MP/HP)
+└── CostEffectData (Serializable) : 비용 데이터
+    ├── 비용 타입
     └── 소모량
 ```
 
