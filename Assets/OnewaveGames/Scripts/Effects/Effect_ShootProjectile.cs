@@ -28,13 +28,21 @@ public class Effect_ShootProjectile : Effect
         float shootPower = effectData.Value;
         float projectileDuration = effectData.Duration;
         
-        GameObject projectileInstance = GameObject.Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        // ObjectPool을 사용하여 투사체 생성
+        GameObject projectileInstance = GameUtils.GetGameObjectFromPool(effectData.CustomData,spawnPos, Quaternion.identity, projectilePrefab);
+        
+        if (projectileInstance == null)
+        {
+            Debug.LogError($"{nameof(Effect_ShootProjectile)} : Failed to get projectile from pool");
+            return;
+        }
+        
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
         
         if (projectile == null)
         {
             Debug.LogError($"{nameof(Effect_ShootProjectile)} : Projectile component not found on prefab");
-            GameObject.Destroy(projectileInstance);
+            ObjectPoolManager.Instance?.Release(projectileInstance, "Projectile");
             return;
         }
         
@@ -42,7 +50,7 @@ public class Effect_ShootProjectile : Effect
         
         EndEffect();
     }
-
+    
     public override bool CanApply(Actor source, Actor target)
     {
         if (!base.CanApply(source, target))

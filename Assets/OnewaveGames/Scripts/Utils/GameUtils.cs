@@ -42,4 +42,21 @@ public static class GameUtils
         Vector3 direction = targetPosition - sourcePosition;
         return direction.normalized;
     }
+    public static GameObject GetGameObjectFromPool(string poolName, Vector3 position, Quaternion rotation, GameObject defaultPrefab)
+    {
+        // ObjectPoolManager가 없으면 기존 방식 사용
+        if (ObjectPoolManager.Instance == null)
+        {
+            Debug.LogWarning($"{nameof(Effect_ShootProjectile)} : ObjectPoolManager not found, using Instantiate");
+            return GameObject.Instantiate(defaultPrefab, position, rotation);
+        }
+        
+        // 풀이 존재하지 않으면 런타임에 생성
+        if (!ObjectPoolManager.Instance.PoolExists(poolName))
+        {
+            ObjectPoolManager.Instance.CreateRuntimePool(poolName, defaultPrefab, 10, 50);
+        }
+        
+        return ObjectPoolManager.Instance.Get(poolName, position, rotation);
+    }
 }
