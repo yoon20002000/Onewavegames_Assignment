@@ -8,17 +8,17 @@ public class EffectData
     private EEffectType eEffectType;
     public EEffectType EffectType => eEffectType;
 
-    [SerializeField]
+    [SerializeField] 
     private float value;
     public float Value => value;
 
-    [SerializeField]
+    [SerializeField] 
     private float duration;
-    public float Duration => duration; 
+    public float Duration => duration;
 
-    [SerializeField]
+    [SerializeField] 
     private string customData;
-    public string CustomData=>customData;
+    public string CustomData => customData;
 
     [SerializeField] 
     private GameObject prefab;

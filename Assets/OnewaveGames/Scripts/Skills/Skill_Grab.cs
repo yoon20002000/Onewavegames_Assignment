@@ -20,11 +20,21 @@ public class Skill_Grab : Skill
     {
         Debug.Log($"{nameof(Skill_Grab)} Applying : {ApplySkillData.SkillName}");
 
-        Ray mouseRay = GameUtils.CreateRayFromMousePosition(Mouse.current.position.ReadValue());
-        if (GameUtils.TryGetRaycastHitPosition(mouseRay, out Vector3 hitPosition))
+        // non target의 경우 마우스 방향으로
+        if (target == null)
         {
-            Vector3 dir = GameUtils.CalculateDirection(source.transform.position,hitPosition, true);
-            Debug.DrawLine(source.AttackSocket.position, source.AttackSocket.position + dir * 5, Color.green, 5);
+            Ray mouseRay = GameUtils.CreateRayFromMousePosition(Mouse.current.position.ReadValue());
+            if (GameUtils.TryGetRaycastHitPosition(mouseRay, out Vector3 hitPosition))
+            {
+                Vector3 dir = GameUtils.CalculateDirection(source.transform.position,hitPosition, true);
+                Debug.DrawLine(source.AttackSocket.position, source.AttackSocket.position + dir * 5, Color.green, 5);
+                source.transform.forward = dir;
+            }
+        }
+        // target이 있을 경우 해당 타겟 방향으로
+        else
+        {
+            Vector3 dir = (target.transform.position - source.transform.position).normalized;
             source.transform.forward = dir;
         }
         

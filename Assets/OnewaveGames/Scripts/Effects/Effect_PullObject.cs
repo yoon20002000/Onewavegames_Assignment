@@ -4,7 +4,7 @@ public class Effect_PullObject : Effect
 {
     private Actor sourceActor;
     private Actor targetActor;
-    private const float endRange = 2f;
+    private const float END_RANGE = 2f;
     
     private float effectDuration => effectData.Duration;
     private float curDuration;
@@ -58,7 +58,7 @@ public class Effect_PullObject : Effect
         float distance = Vector3.Distance(sourceActor.transform.position, targetActor.transform.position);
         
         // 최소 거리 혹은 최대 유지 시간에 도달하면 종료
-        if (distance <= endRange || curDuration >= effectDuration)
+        if (distance <= END_RANGE || curDuration >= effectDuration)
         {
             Debug.Log($"{nameof(Effect_PullObject)} : Pull completed. Distance: {distance}, Duration: {curDuration}");
             EndEffect();
