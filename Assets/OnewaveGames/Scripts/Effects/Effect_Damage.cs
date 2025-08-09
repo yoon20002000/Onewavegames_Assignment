@@ -10,7 +10,7 @@ public class Effect_Damage : Effect
     {
         if (target != null)
         {
-            target.TakeDamage(effectData.Value);
+            target.TakeDamage(source, effectData.Value);
         }
         EndEffect();
     }

@@ -33,7 +33,7 @@ public class CostEffect
             }
             case ECostEffectType.HP:
             {
-                source.TakeDamage(costEffectData.Value);
+                source.TakeDamage(source, costEffectData.Value);
                 break;
             }
             case ECostEffectType.MaxHP:

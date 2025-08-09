@@ -10,7 +10,7 @@ public class Effect_Heal : Effect
     {
         // 타겟이 없으면 자신에게
         Actor healTarget = target ==null ? source : target; 
-        healTarget.Heal(effectData.Value);
+        healTarget.Heal(source, effectData.Value);
         EndEffect();
     }
 

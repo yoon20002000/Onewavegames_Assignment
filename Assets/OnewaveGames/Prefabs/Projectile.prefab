@@ -135,11 +135,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 91990183117885744}
   effectData:
-    eEffectType: 1
-    value: 10
+  - eEffectType: 1
+    value: 20
     duration: 10
     customData: 
     prefab: {fileID: 0}
+  - eEffectType: 2
+    value: 80
+    duration: 0
+    customData: 
+    prefab: {fileID: 0}
+  defaultProjectileLifetime: 5
 --- !u!135 &6687874040367317244
 SphereCollider:
   m_ObjectHideFlags: 0

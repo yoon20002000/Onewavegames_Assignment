@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [DisallowMultipleComponent]
 public class Projectile : MonoBehaviour
@@ -13,10 +14,10 @@ public class Projectile : MonoBehaviour
     private bool bIsInitialized = false;
     
     [SerializeField]
-    private EffectData effectData;
+    private List<EffectData> effectData;
 
-    [SerializeField]
-    private float projectileLifetime;
+    [FormerlySerializedAs("projectileLifetime")] [SerializeField]
+    private float defaultProjectileLifetime;
     private float curDuration = 0;
 
     #region Unity Method region
@@ -37,7 +38,7 @@ public class Projectile : MonoBehaviour
         }
         
         curDuration += Time.deltaTime;
-        if (curDuration >= projectileLifetime)
+        if (curDuration >= defaultProjectileLifetime)
         {
             Debug.Log($"{nameof(Projectile)} {name} destroyed due to lifetime expiration");
             Destroy(gameObject);
@@ -80,7 +81,7 @@ public class Projectile : MonoBehaviour
 
     #endregion
 
-    public void Initialize(Actor inOwnerActor, Vector3 dir, float power, float duration = 10)
+    public void Initialize(Actor inOwnerActor, Vector3 dir, float power, float duration = -1)
     {
         if (inOwnerActor == null)
         {
@@ -99,7 +100,11 @@ public class Projectile : MonoBehaviour
         shootDir = dir.normalized;
         shootPower = power;
         bIsInitialized = true;
-        projectileLifetime = duration;
+        
+        if (duration <= 0)
+        {
+            defaultProjectileLifetime = duration;    
+        }
         
         // 물리 기반 발사
         rb.AddForce(shootDir * shootPower, ForceMode.Impulse);
@@ -122,7 +127,7 @@ public class Projectile : MonoBehaviour
         }
         
         Debug.Log($"{nameof(Projectile)} {name} applying effect to {hitActor.name}");
-        ownerActor.ActorSkillSystem.ApplyEffectFromEffectData(effectData, ownerActor, hitActor);
+        ownerActor.ActorSkillSystem.ApplyEffectsFromEffectData(effectData, ownerActor, hitActor);
     }
     
     // 디버깅용 - 발사 방향 시각화

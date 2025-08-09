@@ -19,7 +19,7 @@ MonoBehaviour:
     \uB04C\uACE0\uC635\uB2C8\uB2E4."
   range: 10
   value: 0
-  cooldown: 5
+  cooldown: 1
   effects:
   - eEffectType: 0
     value: 50

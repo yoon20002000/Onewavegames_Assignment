@@ -30,12 +30,15 @@ public class Actor : MonoBehaviour
     protected const float MIN_MP = 0;
     private void setHP(float hp)
     {
-        
+        float previousHP = curHP;
         curHP = Mathf.Clamp(hp, 0, maxHP);
         onHPChanged.Invoke(curHP);
-        if (curHP <= 0)
+        
+        if (curHP <= 0 && previousHP > 0)
         {
+            Debug.Log($"[{nameof(setHP)}] {name} has died! (Previous HP: {previousHP:F1}, Current HP: {curHP:F1})");
             onDeath.Invoke();
+            Destroy(gameObject);
         }
     }
 
@@ -45,14 +48,26 @@ public class Actor : MonoBehaviour
         onMaxHPChanged.Invoke(maxHP);
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(Actor instigator, float damage)
     {
+        string instigatorName = instigator != null ? instigator.name : "Unknown";
+        
+        Debug.Log($"[{nameof(TakeDamage)}] {name} (HP: {curHP:F1}/{maxHP:F1}) took {damage:F1} damage from {instigatorName}.");
+        
         setHP(curHP - damage);
+        
+        Debug.Log($"[{nameof(TakeDamage)}] {name} HP changed to {curHP:F1}/{maxHP:F1}");
     }
 
-    public void Heal(float heal)
+    public void Heal(Actor instigator, float heal)
     {
+        string instigatorName = instigator != null ? instigator.name : "Unknown";
+        
+        Debug.Log($"[{nameof(Heal)}] {name} (HP: {curHP:F1}/{maxHP:F1}) received {heal:F1} healing from {instigatorName}.");
+        
         setHP(curHP + heal);
+        
+        Debug.Log($"[{nameof(Heal)}] {name} HP changed to {curHP:F1}/{maxHP:F1}");
     }
 
     public void AddMaxHP(float value)
@@ -92,15 +107,15 @@ public class Actor : MonoBehaviour
     private SkillSystem skillSystem;
     public SkillSystem ActorSkillSystem => skillSystem;
     #endregion
-    #region Unity Method region
-
+    
     #region Socket region
 
     [SerializeField]
     private Transform attackSocket;
     public Transform AttackSocket => attackSocket;
     #endregion
-
+    
+    #region Unity Method region
     protected virtual void Awake()
     {
         if (skillSystem == null)
