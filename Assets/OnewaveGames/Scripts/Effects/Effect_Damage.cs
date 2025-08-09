@@ -8,6 +8,10 @@ public class Effect_Damage : Effect
 
     public override void Apply(Actor source, Actor target)
     {
-        throw new System.NotImplementedException();
+        if (target != null)
+        {
+            target.TakeDamage(effectData.Value);
+        }
+        EndEffect();
     }
 }
