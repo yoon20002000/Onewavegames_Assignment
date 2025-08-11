@@ -2,16 +2,18 @@ using UnityEngine;
 
 public class Skill_SelfTarget : Skill
 {
-    public override void StartSkill()
+    protected override void onSkillStarted()
     {
-        // 부모 클래스의 StartSkill 호출 (비용 적용, 쿨타임 설정, bIsRunning 설정)
-        base.StartSkill();
-
-        // 자기 자신을 대상으로 하는 스킬 시작 로그
-        Debug.Log($"[{nameof(StartSkill)}] {ApplySkillData.SkillName} 스킬 시작됨");
         ApplySkill(OwnerActor, OwnerActor);
+        // 스킬 시작 시 추가 로직 (필요시 구현)
+        Debug.Log($"[{nameof(onSkillStarted)}] {ApplySkillData.SkillName} 스킬 시작 콜백");
     }
 
+    protected override void onSkillCompleted()
+    {
+        // 스킬 완료 시 추가 로직 (필요시 구현)
+        Debug.Log($"[{nameof(onSkillCompleted)}] {ApplySkillData.SkillName} 스킬 완료 콜백");
+    }
     public override bool ApplySkill(Actor source, Actor target)
     {
         // 자기 자신을 대상으로 하는 스킬이므로 source와 target이 같아야 함
@@ -38,17 +40,5 @@ public class Skill_SelfTarget : Skill
         CompleteSkill();
         
         return bAllEffectsApplied;
-    }
-
-    protected override void onSkillStarted()
-    {
-        // 스킬 시작 시 추가 로직 (필요시 구현)
-        Debug.Log($"[{nameof(onSkillStarted)}] {ApplySkillData.SkillName} 스킬 시작 콜백");
-    }
-
-    protected override void onSkillCompleted()
-    {
-        // 스킬 완료 시 추가 로직 (필요시 구현)
-        Debug.Log($"[{nameof(onSkillCompleted)}] {ApplySkillData.SkillName} 스킬 완료 콜백");
     }
 }
