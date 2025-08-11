@@ -198,19 +198,11 @@ public enum EEffectType
 ### 3. 효과 조합 예시
 
 #### 대미지를 입히는 그랩스킬
-```csharp
-// 투사체 발사 효과
-이미지 projectile
+![대미지 입히는 그랩](ReadmeResources/SkillGrab.png)
 
-// 데미지 효과
-프로젝타일에 넣은 effect
-```
 
 #### 힐링 스킬
-```csharp
-// 회복 효과
-이미지
-```
+![체력 회복](ReadmeResources/SkillHeal.png)
 
 ## 비용 시스템
 
