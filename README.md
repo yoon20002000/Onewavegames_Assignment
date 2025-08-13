@@ -83,7 +83,6 @@ public class Actor : MonoBehaviour
 4. SkillSystem 자동 생성됨
 
 ### 2. SkillSystem 설정
-**이미지 첨부 필요**: SkillSystem Inspector의 defaultSkills 설정 화면  
 ![스킬 시스템](ReadmeResources/SkillSystem.png)
 ```csharp
 public class SkillSystem : MonoBehaviour
